@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 import org.junit.Test;
 
 /**
+ * 元ネタ:
  * Java 8はラムダ式でここまで変わる（4）：
  * Stream APIの主なメソッドと処理結果のOptionalクラスの使い方
  * http://www.atmarkit.co.jp/ait/articles/1405/20/news032.html

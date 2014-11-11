@@ -261,7 +261,7 @@ public class StreamAPIの主なメソッドと処理結果のOptionalクラス�
 	}
 
 	@Test
-	public void testName() throws Exception {
+	public void 並列処理() throws Exception {
 		List<String> list = Arrays.asList(new String[]{"あ", "い", "う", "え", "お"});
 
 		final StringBuilder sb = new StringBuilder();
@@ -271,6 +271,7 @@ public class StreamAPIの主なメソッドと処理結果のOptionalクラス�
 		assertThat(sb.toString(), is(not("あいうえお")));
 		// ↑ まれに一致して、エラーになる。並列処理で順番通りに出力できたとき。
 
+		// 順番に取得する
 		final StringBuilder sb2 = new StringBuilder();
 		parallelStream1 = list.parallelStream();
 		parallelStream1.forEachOrdered(value -> sb2.append(value));

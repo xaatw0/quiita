@@ -238,7 +238,7 @@ public class StreamAPIの主なメソッドと処理結果のOptionalクラス�
 		list.add(BigDecimal.valueOf(1));
 		list.add(BigDecimal.valueOf(2));
 
-		//
+		// 最大値の取得
 		Optional<BigDecimal> max = list.stream().max((a, b) -> a.compareTo(b));
 		assertThat(max.get(), is(BigDecimal.valueOf(5)));
 

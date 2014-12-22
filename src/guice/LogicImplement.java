@@ -11,5 +11,4 @@ public class LogicImplement implements LogicInterface {
 	public String substract(int a, int b) {
 		return String.valueOf(a - b);
 	}
-
 }

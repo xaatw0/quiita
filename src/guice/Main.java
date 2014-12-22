@@ -1,25 +1,55 @@
 package guice;
 
+import java.util.List;
+
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-public class Main {
 
-	public static void main(String[] args) {
-		Injector injector = Guice.createInjector(new AbstractModule() {
+public class Main extends Application {
+	@Override
+	public void start(Stage primaryStage) {
+		try {
 
-			@Override
-			protected void configure() {
-			}
-		});
+			FXMLLoader loader = new FXMLLoader();
+			loader.load(getClass().getResource("MainApplication.fxml").openStream());
+			BorderPane root = loader.getRoot();
+			Scene scene = new Scene(root,400,400);
 
-		Controller controller = new Controller();
-		injector.injectMembers(controller);
+			// メイン文の引数を取得する
+			final List<String> args = getParameters().getRaw();
 
-		System.out.println("3 + 5 = " + controller.add(3, 5));
-		System.out.println("5 - 3 = " + controller.substract(5, 3));
+			// DIの注入の定義
+			Injector injector = Guice.createInjector(new AbstractModule() {
 
+				@Override
+				protected void configure() {
+
+					if (0 < args.size() && args.get(0).equals("TEST")){
+						bind(LogicInterface.class).to(LogicDummy.class);
+					}
+				}
+			});
+			
+			// コントロールを取得し、DIの注入を実施する
+			injector.injectMembers(loader.getController());
+
+			primaryStage.setScene(scene);
+			primaryStage.show();
+
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 
+	public static void main(String[] args) {
+		launch(args);
+	}
 }

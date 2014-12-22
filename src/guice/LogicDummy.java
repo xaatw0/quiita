@@ -11,5 +11,4 @@ public class LogicDummy implements LogicInterface {
 	public String substract(int a, int b) {
 		return "(" + a + "引く" + b + ")";
 	}
-
 }

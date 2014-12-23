@@ -5,15 +5,15 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane prefHeight="230.0" prefWidth="224.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="guice.MainController">
+<BorderPane prefHeight="116.0" prefWidth="224.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="guice.MainController">
    <center>
-      <Pane prefHeight="222.0" prefWidth="224.0" BorderPane.alignment="CENTER">
+      <Pane prefHeight="112.0" prefWidth="220.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="btn" layoutX="155.0" layoutY="80.0" mnemonicParsing="false" onAction="#onBtnClicked" text="Button" />
-            <TextField fx:id="input1" layoutX="14.0" layoutY="80.0" prefHeight="23.0" prefWidth="51.0" />
-            <Label fx:id="lblAdd" layoutX="17.0" layoutY="114.0" prefHeight="15.0" prefWidth="131.0" text="Label" />
-            <TextField fx:id="input2" layoutX="81.0" layoutY="80.0" prefHeight="23.0" prefWidth="63.0" />
-            <Label fx:id="lblSubstract" layoutX="17.0" layoutY="139.0" text="Label" />
+            <Button fx:id="btn" layoutX="155.0" layoutY="24.0" mnemonicParsing="false" onAction="#onBtnClicked" text="Button" />
+            <TextField fx:id="input1" layoutX="14.0" layoutY="24.0" prefHeight="23.0" prefWidth="51.0" />
+            <Label fx:id="lblAdd" layoutX="17.0" layoutY="58.0" prefHeight="15.0" prefWidth="131.0" text="Label" />
+            <TextField fx:id="input2" layoutX="81.0" layoutY="24.0" prefHeight="23.0" prefWidth="63.0" />
+            <Label fx:id="lblSubstract" layoutX="17.0" layoutY="83.0" text="Label" />
          </children>
       </Pane>
    </center>

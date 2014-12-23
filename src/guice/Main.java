@@ -21,7 +21,7 @@ public class Main extends Application {
 			FXMLLoader loader = new FXMLLoader();
 			loader.load(getClass().getResource("MainApplication.fxml").openStream());
 			BorderPane root = loader.getRoot();
-			Scene scene = new Scene(root,400,400);
+			Scene scene = new Scene(root);
 
 			// メイン文の引数を取得する
 			final List<String> args = getParameters().getRaw();
@@ -37,7 +37,7 @@ public class Main extends Application {
 					}
 				}
 			});
-			
+
 			// コントロールを取得し、DIの注入を実施する
 			injector.injectMembers(loader.getController());
 

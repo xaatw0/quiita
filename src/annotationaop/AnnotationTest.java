@@ -34,5 +34,4 @@ public class AnnotationTest {
 			System.out.println(annotation.toString());
 		}
 	}
-
 }

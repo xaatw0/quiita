@@ -1,0 +1,24 @@
+表示	Markdown
+太字	**text**
+強調表示	*text*
+コードのインライン表示	`code`
+qiita.rb
+puts 'code with syntax'
+```lang:filename
+code
+```
+リンク	[title](http://~)
+画像埋め込み	![alt](http://~)
+見出し (h1~h6)
+
+# text, ## text, ### text...
+箇条書き
+* item
+番号付きの箇条書き
+1. item
+水平線	* * *
+引用
+> text
+Markdownのエスケープ	\
+
+~~打ち消し~~

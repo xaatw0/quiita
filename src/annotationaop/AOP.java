@@ -7,6 +7,9 @@ import java.util.Arrays;
 
 import annotationaop.AnnotationTest.MethodAnnotation;
 
+/**
+ *「アノテーションを使用してAOPをする」のソース
+ */
 public class AOP {
 
 	/**

@@ -4,52 +4,72 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.*;
 
 import java.util.function.Predicate;
+import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import org.junit.Test;
 
 // http://java-reference.sakuraweb.com/java_string_regex.html
+// http://www.ne.jp/asahi/hishidama/home/tech/java/regexp.html
 public class Javaの正規表現 {
 
+	/**
+	 * matches()は、文字列全体がパターンにマッチしているか<br/>
+	 * find()は、文字列の一部がパターンにマッチしているか
+	 */
 	@Test
 	public void matchsfind(){
 
+		/***   ABC     ***/
 		Pattern pattern = Pattern.compile("ABC");
 
-		// matches()は、文字列全体がパターンにマッチしているか
-		// find()は、文字列の一部がパターンにマッチしているか
 		Matcher matcher = pattern.matcher("ABC");
 		assertThat(matcher.matches(), is(true));
-		assertThat(matcher.find(), is(false));
 
+		matcher = pattern.matcher("ABC");
+		assertThat(matcher.find(), is(true));
+
+		// AABC
 		matcher = pattern.matcher("AABC");
 		assertThat(matcher.matches(), is(false));
+
+		matcher = pattern.matcher("AABC");
 		assertThat(matcher.find(), is(true));
 
+		// ABCA
 		matcher = pattern.matcher("ABCA");
 		assertThat(matcher.matches(), is(false));
+
+		matcher = pattern.matcher("ABCA");
 		assertThat(matcher.find(), is(true));
 
+		// ABD
 		matcher = pattern.matcher("ABD");
 		assertThat(matcher.matches(), is(false));
+
+		matcher = pattern.matcher("ABD");
+		assertThat(matcher.find(), is(false));
+
+		/***   ^ABC$     ***/
+		pattern = Pattern.compile("^ABC$");
+
+		// ABC
+		matcher = pattern.matcher("ABC");
+		assertThat(matcher.matches(), is(true));
+
+		matcher = pattern.matcher("ABC");
+		assertThat(matcher.find(), is(true));
+
+		// ABCD
+		matcher = pattern.matcher("ABCD");
+		assertThat(matcher.matches(), is(false));
+
+		matcher = pattern.matcher("ABCD");
 		assertThat(matcher.find(), is(false));
 	}
 
-	/**
-	 * JDK 1.8以上
-	 * 文字列全体でも文字列の一部でもマッチして、便利そう
-	 * predicate 【自動】断言する 【他動】〔行動や議論などの〕基礎を置く(alc.co.jpより)
-	 */
-	@Test
-	public void asPredicate(){
-
-		Predicate<String> predicate = Pattern.compile("ABC").asPredicate();
-		assertThat(predicate.test("ABC"), is(true));
-		assertThat(predicate.test("AABC"), is(true));
-		assertThat(predicate.test("ABCA"), is(true));
-		assertThat(predicate.test("ABD"), is(false));
-	}
 
 	/**
 	 * 正規表現の基礎(元ネタ:http://java-reference.sakuraweb.com/java_string_regex.html)
@@ -179,7 +199,174 @@ public class Javaの正規表現 {
 		assertThat(pattern.matcher("0").find(), is(true));
 		assertThat(pattern.matcher("5").find(), is(true));
 		assertThat(pattern.matcher("4").find(), is(false));
+	}
 
+	@Test
+	public void group(){
+
+		//                                          012345678901234
+		Matcher m = Pattern.compile("1.3").matcher("abc123def1B3ghi");
+
+		// 通常はwhile(m.find)で実施する
+		assertThat(m.find(), is(true));
+		assertThat(m.group(),is("123"));
+		assertThat(m.group(0),is("123"));
+		assertThat(m.start(), is(3));
+		assertThat(m.end(), is(6));
+
+		assertThat(m.find(), is(true));
+		assertThat(m.group(),is("1B3"));
+		assertThat(m.group(0),is("1B3"));
+		assertThat(m.start(), is(9));
+		assertThat(m.end(), is(12));
+
+		assertThat(m.find(), is(false));
+	}
+
+	@Test
+	public void group複数(){
+
+		//郵便番号の正規表現
+		Pattern pattern = Pattern.compile("(\\d{3})-(\\d{4})");
+
+		Matcher matcher = pattern.matcher("123-4567");
+		assertThat(matcher.matches(), is(true));
+
+		assertThat(matcher.groupCount(), is(2));
+		assertThat(matcher.group(0), is("123-4567"));
+		assertThat(matcher.group(1), is("123"));
+		assertThat(matcher.group(2), is("4567"));
+
+
+		matcher = pattern.matcher("123-4567");
+		assertThat(matcher.find(), is(true));
+	}
+
+	/**
+	 * JDK 1.5以降
+	 * MatchResult（JDK1.5以降）は独立したインスタンスとなっているので変化しない。
+     *（ただしMatchResultはstart/end以外のデータもコピーして保持するので、start/endしか使わないならちょっとコストが高いかも）
+	 */
+	@Test
+	public void matchResult(){
+
+		//                                          012345678901234
+		Matcher m = Pattern.compile("1.3").matcher("abc123def1B3ghi");
+
+		assertThat(m.find(), is(true));
+		MatchResult result1 = m.toMatchResult();
+		assertThat(result1.group(),is("123"));
+		assertThat(result1.group(0),is("123"));
+		assertThat(result1.start(), is(3));
+		assertThat(result1.end(), is(6));
+		assertThat(m.toMatchResult(), is(sameInstance(result1)));
+
+		assertThat(m.find(), is(true));
+		MatchResult result2 = m.toMatchResult();
+		assertThat(result2.group(),is("1B3"));
+		assertThat(result2.group(0),is("1B3"));
+		assertThat(result2.start(), is(9));
+		assertThat(result2.end(), is(12));
+		assertThat(m.toMatchResult(), is(not(sameInstance(result1))));
+		assertThat(m.toMatchResult(), is(sameInstance(result2)));
+
+		assertThat(m.find(), is(false));
+	}
+
+	/**
+	 * エスケープ処理が必要な文字:
+	 * ¥ * + . ? { } ( ) [ ] ^ $ - |
+	 *
+	 * 文字列内に「\」があるか判断する場合、
+	 * 正規表現内のの「\」のエスケープ処理で「\\」となるが、、
+	 * Javaソースのエスケープ処理も必要なため、「\\」のエスケープつきは「\\\\」となる
+	 * Javaソース内のエスケープ文字と、Java実行環境の正規表現でのエスケープ文字を考えないといけない
+	 */
+	@Test
+	public void エスケープ文字(){
+		Pattern pattern = Pattern.compile("\\*");
+
+		// こちらは実行エラー
+		//pattern = Pattern.compile("*");
+
+		Matcher matcher = pattern.matcher("*");
+		assertThat(matcher.find(), is(true));
+
+
+		pattern = Pattern.compile("\\\\");
+		matcher = pattern.matcher("\\");
+		assertThat(matcher.find(), is(true));
+
+		// こちらは実行エラー
+		// pattern = Pattern.compile("\\\\");
+	}
+
+	/**
+	 * JDK 1.5以降
+	 * (よくわからんが、)エスケープした文字列を返してくれる
+
+	 */
+	@Test
+	public void quote(){
+		assertThat(Pattern.quote("."), is("\\Q.\\E"));
+		assertThat(Pattern.quote(","), is("\\Q,\\E"));
+		assertThat(Pattern.quote("\\"), is("\\Q\\\\E"));
+
+		assertThat("a.b.c".split(".").length, is(0));
+		assertThat("a.b.c".split("\\.").length, is(3));
+		assertThat("a.b.c".split(Pattern.quote(".")).length, is(3));
+	}
+
+	/**
+	 * JDK 1.8以降
+	 */
+	@Test
+	public void group名前を指定(){
+
+		//電話番号の正規表現
+		Pattern pattern = Pattern.compile("0(?<shigai>\\d{1,4})-(?<shinai>\\d+)-(?<bango>\\d{4})");
+
+		Matcher matcher = pattern.matcher("0120-863-5730");
+		assertThat(matcher.matches(), is(true));
+		assertThat(matcher.groupCount(), is(3));
+
+		assertThat(matcher.group(0), is("0120-863-5730"));
+		assertThat(matcher.group(1), is("120"));
+		assertThat(matcher.group(2), is("863"));
+		assertThat(matcher.group(3), is("5730"));
+
+		assertThat(matcher.group("shigai"), is("120"));
+		assertThat(matcher.group("shinai"), is("863"));
+		assertThat(matcher.group("bango"), is("5730"));
+
+		// 日本語を付けると、実行エラー(コンパイルは通る)
+		//Pattern pattern2 = Pattern.compile("0(?<市外>\\d{1,4})-(?<市内>\\d+)-(?<番号>\\d{4})");
+	}
+
+	/**
+	 * JDK 1.8以降
+	 * 文字列全体でも文字列の一部でもマッチして、便利そう
+	 * predicate 【自動】断言する 【他動】〔行動や議論などの〕基礎を置く(alc.co.jpより)
+	 */
+	@Test
+	public void asPredicate(){
+
+		Predicate<String> predicate = Pattern.compile("ABC").asPredicate();
+		assertThat(predicate.test("ABC"), is(true));
+		assertThat(predicate.test("AABC"), is(true));
+		assertThat(predicate.test("ABCA"), is(true));
+		assertThat(predicate.test("ABD"), is(false));
+	}
+
+	/**
+	 * JDK 1.8以降
+	 */
+	@Test
+	public void splitAsStream(){
+
+		Pattern pattern = Pattern.compile("-");
+		Stream<String> stream = pattern.splitAsStream("0120-863-5730");
+		assertThat(stream.count(), is(3L));
 	}
 
 }

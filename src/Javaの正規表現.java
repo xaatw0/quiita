@@ -70,7 +70,6 @@ public class Javaの正規表現 {
 		assertThat(matcher.find(), is(false));
 	}
 
-
 	/**
 	 * 正規表現の基礎(元ネタ:http://java-reference.sakuraweb.com/java_string_regex.html)
 	 */
@@ -78,6 +77,33 @@ public class Javaの正規表現 {
 	public void pattern(){
 
 		Pattern pattern;
+
+		//.: 任意の１文字にマッチする
+		pattern = Pattern.compile("a.c");
+		assertThat(pattern.matcher("abc").matches(), is(true));
+		assertThat(pattern.matcher("abbc").matches(), is(false));
+		assertThat(pattern.matcher("ac").matches(), is(false));
+
+		//?: 直前の文字が0個または1個にマッチする
+		pattern = Pattern.compile("^A?");
+		assertThat(pattern.matcher("").matches(), is(true));
+		assertThat(pattern.matcher("A").matches(), is(true));
+		assertThat(pattern.matcher("AA").matches(), is(false));
+		assertThat(pattern.matcher("B").matches(), is(false));
+
+		//*: 直前の文字が0個以上にマッチする
+		pattern = Pattern.compile("^A*");
+		assertThat(pattern.matcher("").matches(), is(true));
+		assertThat(pattern.matcher("A").matches(), is(true));
+		assertThat(pattern.matcher("AA").matches(), is(true));
+		assertThat(pattern.matcher("B").matches(), is(false));
+
+		//+: 直前の文字が1個以上にマッチする
+		pattern = Pattern.compile("^A+");
+		assertThat(pattern.matcher("A").matches(), is(true));
+		assertThat(pattern.matcher("AA").matches(), is(true));
+		assertThat(pattern.matcher("B").matches(), is(false));
+		assertThat(pattern.matcher("").matches(), is(false));
 
 		// 「^」先頭にマッチする
 		pattern = Pattern.compile("^ab");
@@ -88,33 +114,6 @@ public class Javaの正規表現 {
 		pattern = Pattern.compile("ab$");
 		assertThat(pattern.matcher("cdab").find(), is(true));
 		assertThat(pattern.matcher("abcd").find(), is(false));
-
-		//.: 任意の１文字にマッチする
-		pattern = Pattern.compile("a.c");
-		assertThat(pattern.matcher("abc").find(), is(true));
-		assertThat(pattern.matcher("abbc").find(), is(false));
-		assertThat(pattern.matcher("ac").find(), is(false));
-
-		//?: 直前の文字が0個または1個にマッチする
-		pattern = Pattern.compile("^A?$");
-		assertThat(pattern.matcher("").find(), is(true));
-		assertThat(pattern.matcher("A").find(), is(true));
-		assertThat(pattern.matcher("AA").find(), is(false));
-		assertThat(pattern.matcher("B").find(), is(false));
-
-		//*: 直前の文字が0個以上にマッチする
-		pattern = Pattern.compile("^A*$");
-		assertThat(pattern.matcher("").find(), is(true));
-		assertThat(pattern.matcher("A").find(), is(true));
-		assertThat(pattern.matcher("AA").find(), is(true));
-		assertThat(pattern.matcher("B").find(), is(false));
-
-		//+: 直前の文字が1個以上にマッチする
-		pattern = Pattern.compile("^A+$");
-		assertThat(pattern.matcher("A").find(), is(true));
-		assertThat(pattern.matcher("AA").find(), is(true));
-		assertThat(pattern.matcher("B").find(), is(false));
-		assertThat(pattern.matcher("").find(), is(false));
 
 		//\d: 半角数値(0～9)にマッチする ※ [0-9]と同じ
 		pattern = Pattern.compile("\\d");
@@ -242,6 +241,69 @@ public class Javaの正規表現 {
 		assertThat(matcher.find(), is(true));
 	}
 
+	@Test
+	public void 時刻チェック(){
+
+		Pattern pattern = Pattern.compile("([0-2]?[0-9]):([0-9]{2})");
+
+		Matcher matcher = pattern.matcher("12:00");
+
+		if (matcher.find()){
+			int test= 100 * Integer.parseInt(matcher.group(1)) + Integer.parseInt(matcher.group(2));
+			assertThat(test, is(1200));
+		}
+
+		assertThat(pattern.matcher("1:30").matches(), is(true));
+		assertThat(pattern.matcher("01:30").matches(), is(true));
+		assertThat(pattern.matcher("1:00").matches(), is(true));
+		assertThat(pattern.matcher("25:45").matches(), is(true));
+
+		assertThat(pattern.matcher("0145").matches(), is(false));
+		assertThat(pattern.matcher("A1:45").matches(), is(false));
+		assertThat(pattern.matcher(":45").matches(), is(false));
+		assertThat(pattern.matcher("01:").matches(), is(false));
+		assertThat(pattern.matcher("01:1").matches(), is(false));
+		assertThat(pattern.matcher("01:123").matches(), is(false));
+
+	}
+
+	@Test
+	public void カッコ(){
+
+		// 「交代(氏名)」にヒットして、氏名のみを取得したい
+		//  正規表現:交代\(([^)]*)\)
+		//               \(       \): カッコをそのまま使うので、エスケープ処理に\を付けている
+		//                            正規表現とJavaのエスケープ処理が必要なので、ソースでは「\\(」となる
+		//                 (     )  : グループの()
+		//                  [^)]*   :「)」以外の文字の連続。「)」の前までの文字をグループ化する
+		//                            []内のカッコにはエスケープ処理が不要らしい、、、
+
+		Pattern ptnRelacement = Pattern.compile("交代\\(([^)]*)\\)");
+
+		Matcher matcher = ptnRelacement.matcher("交代(あいう)");
+		assertThat(matcher.matches(), is(true));
+		assertThat(matcher.group(), is("交代(あいう)"));
+		assertThat(matcher.group(1), is("あいう"));
+
+		assertThat(ptnRelacement.matcher("交代(あいう)").matches(), is(true));
+		assertThat(ptnRelacement.matcher("交代あいう)").matches(), is(false));
+		assertThat(ptnRelacement.matcher("交代(あいう").matches(), is(false));
+
+
+		// ちょっとテスト
+		ptnRelacement = Pattern.compile("交代\\(([^\\)]*)\\)");
+		matcher = ptnRelacement.matcher("交代(あい\\う)");
+		assertThat(matcher.matches(), is(true));
+		assertThat(matcher.group(), is("交代(あい\\う)"));
+		assertThat(matcher.group(1), is("あい\\う"));
+
+		ptnRelacement = Pattern.compile("交代\\(([^\\\\)]*)\\)");
+		assertThat(ptnRelacement.matcher("交代(あいう)").matches(), is(true));
+		assertThat(ptnRelacement.matcher("交代(あい\\う)").matches(), is(false));
+		assertThat(ptnRelacement.matcher("交代())").matches(), is(false));
+
+	}
+
 	/**
 	 * JDK 1.5以降
 	 * MatchResult（JDK1.5以降）は独立したインスタンスとなっているので変化しない。
@@ -259,7 +321,9 @@ public class Javaの正規表現 {
 		assertThat(result1.group(0),is("123"));
 		assertThat(result1.start(), is(3));
 		assertThat(result1.end(), is(6));
-		assertThat(m.toMatchResult(), is(sameInstance(result1)));
+
+		assertThat(m.toMatchResult(), is(not(sameInstance(result1))));
+		assertThat(m.toMatchResult(), is(not(sameInstance(result1))));
 
 		assertThat(m.find(), is(true));
 		MatchResult result2 = m.toMatchResult();
@@ -267,8 +331,6 @@ public class Javaの正規表現 {
 		assertThat(result2.group(0),is("1B3"));
 		assertThat(result2.start(), is(9));
 		assertThat(result2.end(), is(12));
-		assertThat(m.toMatchResult(), is(not(sameInstance(result1))));
-		assertThat(m.toMatchResult(), is(sameInstance(result2)));
 
 		assertThat(m.find(), is(false));
 	}
@@ -276,29 +338,62 @@ public class Javaの正規表現 {
 	/**
 	 * エスケープ処理が必要な文字:
 	 * ¥ * + . ? { } ( ) [ ] ^ $ - |
-	 *
-	 * 文字列内に「\」があるか判断する場合、
-	 * 正規表現内のの「\」のエスケープ処理で「\\」となるが、、
-	 * Javaソースのエスケープ処理も必要なため、「\\」のエスケープつきは「\\\\」となる
-	 * Javaソース内のエスケープ文字と、Java実行環境の正規表現でのエスケープ文字を考えないといけない
 	 */
 	@Test
-	public void エスケープ文字(){
+	public void メタ文字(){
 		Pattern pattern = Pattern.compile("\\*");
 
 		// こちらは実行エラー
 		//pattern = Pattern.compile("*");
 
 		Matcher matcher = pattern.matcher("*");
-		assertThat(matcher.find(), is(true));
+		assertThat(matcher.matches(), is(true));
 
-
+		// 文字列内に「\」があるか判断する場合、
+		// Javaソースのエスケープ処理も必要なため、「\\」のエスケープつきは「\\\\」となる
+		// Javaソース内のエスケープ文字と、Java実行環境の正規表現でのエスケープ文字を考えないといけない
+		// (嗚呼、ややこしい)
 		pattern = Pattern.compile("\\\\");
 		matcher = pattern.matcher("\\");
 		assertThat(matcher.find(), is(true));
+	}
 
-		// こちらは実行エラー
-		// pattern = Pattern.compile("\\\\");
+	/**
+	 * 参考: http://homepage2.nifty.com/jr-kun/hidemaru_qa/4_regulr.html
+	 */
+	@Test
+	public void キャラクタクラス(){
+		// 数字
+		Pattern pattern = Pattern.compile("[0-9]");
+		assertThat(pattern.matcher("0").matches(), is(true));
+		assertThat(pattern.matcher("9").matches(), is(true));
+		assertThat(pattern.matcher("A").matches(), is(false));
+
+		// 全角ひらがな
+		pattern = Pattern.compile("[ぁ-ん]");
+		assertThat(pattern.matcher("あ").matches(), is(true));
+		assertThat(pattern.matcher("ば").matches(), is(true));
+		assertThat(pattern.matcher("ア").matches(), is(false));
+
+		// 全角カタカナ
+		pattern = Pattern.compile("[ァ-ヶ]");
+		assertThat(pattern.matcher("ァ").matches(), is(true));
+		assertThat(pattern.matcher("ア").matches(), is(true));
+		assertThat(pattern.matcher("あ").matches(), is(false));
+
+		// 任意の１バイト文字
+		pattern = Pattern.compile("[ -~]");
+		assertThat(pattern.matcher("0").matches(), is(true));
+		assertThat(pattern.matcher("A").matches(), is(true));
+		assertThat(pattern.matcher("ア").matches(), is(false));
+
+		// 漢字
+		pattern = Pattern.compile("[亜-黑]");
+		assertThat(pattern.matcher("亜").matches(), is(true));
+		assertThat(pattern.matcher("廣").matches(), is(true));
+		assertThat(pattern.matcher("0").matches(), is(false));
+		assertThat(pattern.matcher("A").matches(), is(false));
+		assertThat(pattern.matcher("ア").matches(), is(false));
 	}
 
 	/**

@@ -108,22 +108,22 @@ public class Javaの正規表現 {
 
 		//{n}:直前の文字にn回マッチする
 		pattern = Pattern.compile("^A{3}");
-		assertThat(pattern.matcher("AAA").find(), is(true));
-		assertThat(pattern.matcher("AA").find(), is(false));
-		assertThat(pattern.matcher("AAAA").find(), is(false));
+		assertThat(pattern.matcher("AAA").matches(), is(true));
+		assertThat(pattern.matcher("AA").matches(), is(false));
+		assertThat(pattern.matcher("AAAA").matches(), is(false));
 
 		//{n,}:直前の文字にn回以上マッチする
 		pattern = Pattern.compile("^A{3,}");
-		assertThat(pattern.matcher("AAA").find(), is(true));
-		assertThat(pattern.matcher("AAAA").find(), is(true));
-		assertThat(pattern.matcher("AA").find(), is(false));
+		assertThat(pattern.matcher("AAA").matches(), is(true));
+		assertThat(pattern.matcher("AAAA").matches(), is(true));
+		assertThat(pattern.matcher("AA").matches(), is(false));
 
 		//{n,m}:直前の文字にn回以上m回以下マッチする
 		pattern = Pattern.compile("^A{3,4}");
-		assertThat(pattern.matcher("AAA").find(), is(true));
-		assertThat(pattern.matcher("AAAA").find(), is(true));
-		assertThat(pattern.matcher("AA").find(), is(false));
-		assertThat(pattern.matcher("AAAAA").find(), is(false));
+		assertThat(pattern.matcher("AAA").matches(), is(true));
+		assertThat(pattern.matcher("AAAA").matches(), is(true));
+		assertThat(pattern.matcher("AA").matches(), is(false));
+		assertThat(pattern.matcher("AAAAA").matches(), is(false));
 	}
 
 	@Test
@@ -329,6 +329,54 @@ public class Javaの正規表現 {
 
 	}
 
+
+	@Test
+	public void 日本語テキストへのマッチ(){
+
+		Pattern pattern;
+		Matcher matcher;
+
+		// ひらがな
+		pattern = Pattern.compile("[\u3040-\u309F]");
+		assertThat(pattern.matcher("あ").matches(), is(true));
+		assertThat(pattern.matcher("ん").matches(), is(true));
+		assertThat(pattern.matcher("ば").matches(), is(true));
+
+		assertThat(pattern.matcher("A").matches(), is(false));
+		assertThat(pattern.matcher("ア").matches(), is(false));
+		assertThat(pattern.matcher("ｱ").matches(), is(false));
+
+		// 全角カタカナ
+		pattern = Pattern.compile("[\u30A0-\u30FF]");
+		assertThat(pattern.matcher("ア").matches(), is(true));
+		assertThat(pattern.matcher("ン").matches(), is(true));
+		assertThat(pattern.matcher("ヴ").matches(), is(true));
+
+		assertThat(pattern.matcher("A").matches(), is(false));
+		assertThat(pattern.matcher("あ").matches(), is(false));
+		assertThat(pattern.matcher("ｱ").matches(), is(false));
+
+		// 半角カタカナ
+		pattern = Pattern.compile("[\uFF61-\uFF9F]");
+		assertThat(pattern.matcher("ｱ").matches(), is(true));
+		assertThat(pattern.matcher("ﾝ").matches(), is(true));
+		assertThat(pattern.matcher("ﾞ").matches(), is(true)); // ｳﾞｧの点々
+
+		assertThat(pattern.matcher("A").matches(), is(false));
+		assertThat(pattern.matcher("あ").matches(), is(false));
+		assertThat(pattern.matcher("ア").matches(), is(false));
+
+		// 漢字
+		pattern = Pattern.compile("[\u4E00-\u9FFF]");
+		assertThat(pattern.matcher("亜").matches(), is(true));
+		assertThat(pattern.matcher("両").matches(), is(true));
+		assertThat(pattern.matcher("廣").matches(), is(true));
+
+		assertThat(pattern.matcher("A").matches(), is(false));
+		assertThat(pattern.matcher("あ").matches(), is(false));
+		assertThat(pattern.matcher("ア").matches(), is(false));
+		assertThat(pattern.matcher("ｱ").matches(), is(false));
+	}
 
 	/**
 	 * ?: 最短一致数量子<br/>

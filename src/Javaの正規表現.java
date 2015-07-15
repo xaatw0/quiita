@@ -1,5 +1,3 @@
-
-
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.*;
 
@@ -11,8 +9,11 @@ import java.util.stream.Stream;
 
 import org.junit.Test;
 
-// http://java-reference.sakuraweb.com/java_string_regex.html
-// http://www.ne.jp/asahi/hishidama/home/tech/java/regexp.html
+/**
+ * (元ネタ)<br/>
+ *  http://java-reference.sakuraweb.com/java_string_regex.html<br/>
+ *  http://www.ne.jp/asahi/hishidama/home/tech/java/regexp.html<br/>
+ */
 public class Javaの正規表現 {
 
 	/**
@@ -304,9 +305,91 @@ public class Javaの正規表現 {
 
 	}
 
+
 	/**
-	 * JDK 1.5以降
-	 * MatchResult（JDK1.5以降）は独立したインスタンスとなっているので変化しない。
+	 * ?: 最短一致数量子<br/>
+	 * 元ネタ: http://www.javazuki.com/tag/正規表現
+	 */
+	@Test
+	public void 欲張らない繰り返し(){
+
+		// 通常の繰り返しではできる限りたくさんマッチさせようとする。
+		// (いわゆる欲張りな繰り返し)
+		Pattern pattern = Pattern.compile("<li>.*</li>");
+		Matcher matcher = pattern.matcher("<li>baseball</li><li>soccer</li>");
+		assertThat(matcher.matches(), is(true));
+		assertThat(matcher.group(), is("<li>baseball</li><li>soccer</li>"));
+
+		// 部分抽出など繰り返しの範囲を狭くしたい場合は
+		// ｢?｣(最短一致数量子)を指定する。
+		pattern = Pattern.compile("<li>.*?</li>");
+		matcher = pattern.matcher("<li>baseball</li><li>soccer</li>");
+		assertThat(matcher.find(), is(true));
+		assertThat(matcher.group(), is("<li>baseball</li>"));
+		assertThat(matcher.find(), is(true));
+		assertThat(matcher.group(), is("<li>soccer</li>"));
+	}
+
+	@Test
+	public void 置換(){
+		// ファイル名の連番は維持して、ファイル名を変更する
+		Pattern pattern = Pattern.compile("[^\\d.]+");
+		Matcher matcher = pattern.matcher("IMG001.jpg");
+		assertThat(matcher.find(), is(true));
+		assertThat(matcher.group(), is("IMG"));
+		assertThat(matcher.replaceFirst("写真"), is("写真001.jpg"));
+		assertThat(matcher.replaceAll("写真"), is("写真001.写真"));
+	}
+
+	/**
+	 * 「メールアドレスの正規表現がめちゃめちゃ遅くなることがある件について」<br/>
+	 * (http://d.hatena.ne.jp/n_shuyo/20111020/regular_expression)<br/>
+	 * という記事があったので、テスト。この量では実感できず、、、<br/>
+	 * 要約: 連続文字の表現に「+」を使うより、{1,64}と制限をつけた連続文字のほうが早い。<br/>
+	 */
+	@Test
+	public void メールアドレスが遅い(){
+
+		String[] mailAddresses = {
+				"a234567890123456789012345678901234567890123456789012345678901234@bbbbbbbbbbbbbb.com"
+				,"b23456789012345678912345678901234567890123456789012345678901234@bbbbbbbbbbbbbb.com"
+				,"c234567890123456789012345678901234567890123456789012345678901234@bbbbbbbbbbbbbb.com"
+				,"d234567890123456789012345678901234567890123456789012345678901234@bbbbbbbbbbbbbb.com"
+				,"e234567890123456789012345678901234567890123456789012345678901234@bbbbbbbbbbbbbb.com"
+				,"f234567890123456789012345678901234567890123456789012345678901234@bbbbbbbbbbbbbb.com"};
+
+
+		// ファイル名の連番は維持して、ファイル名を変更する
+		Pattern pattern = Pattern.compile("[-_.0-9A-Za-z]+@[-_0-9A-Za-z]+[-_.0-9A-Za-z]+");
+
+		for(String address: mailAddresses){
+			assertThat(pattern.matcher(address).matches(), is(true));
+		}
+	}
+
+	@Test
+	public void メールアドレスが遅い2(){
+
+		String[] mailAddresses = {
+				"a234567890123456789012345678901234567890123456789012345678901234@bbbbbbbbbbbbbb.com"
+				,"b23456789012345678912345678901234567890123456789012345678901234@bbbbbbbbbbbbbb.com"
+				,"c234567890123456789012345678901234567890123456789012345678901234@bbbbbbbbbbbbbb.com"
+				,"d234567890123456789012345678901234567890123456789012345678901234@bbbbbbbbbbbbbb.com"
+				,"e234567890123456789012345678901234567890123456789012345678901234@bbbbbbbbbbbbbb.com"
+				,"f234567890123456789012345678901234567890123456789012345678901234@bbbbbbbbbbbbbb.com"};
+
+
+		// ファイル名の連番は維持して、ファイル名を変更する
+		Pattern pattern = Pattern.compile("[-_.0-9A-Za-z]{0,64}@[-_0-9A-Za-z]+[-_.0-9A-Za-z]+");
+
+		for(String address: mailAddresses){
+			assertThat(pattern.matcher(address).matches(), is(true));
+		}
+	}
+
+	/**
+	 * JDK 1.5以降<br/>
+	 * MatchResult（JDK1.5以降）は独立したインスタンスとなっているので変化しない。<br/>
      *（ただしMatchResultはstart/end以外のデータもコピーして保持するので、start/endしか使わないならちょっとコストが高いかも）
 	 */
 	@Test
@@ -336,7 +419,7 @@ public class Javaの正規表現 {
 	}
 
 	/**
-	 * エスケープ処理が必要な文字:
+	 * エスケープ処理が必要な文字:<br/>
 	 * ¥ * + . ? { } ( ) [ ] ^ $ - |
 	 */
 	@Test
@@ -397,7 +480,7 @@ public class Javaの正規表現 {
 	}
 
 	/**
-	 * JDK 1.5以降
+	 * JDK 1.5以降<br/>
 	 * (よくわからんが、)エスケープした文字列を返してくれる
 
 	 */
@@ -439,8 +522,8 @@ public class Javaの正規表現 {
 	}
 
 	/**
-	 * JDK 1.8以降
-	 * 文字列全体でも文字列の一部でもマッチして、便利そう
+	 * JDK 1.8以降<br/>
+	 * 文字列全体でも文字列の一部でもマッチして、便利そう<br/>
 	 * predicate 【自動】断言する 【他動】〔行動や議論などの〕基礎を置く(alc.co.jpより)
 	 */
 	@Test

@@ -75,7 +75,7 @@ public class Javaの正規表現 {
 	 * 正規表現の基礎(元ネタ:http://java-reference.sakuraweb.com/java_string_regex.html)
 	 */
 	@Test
-	public void pattern(){
+	public void 任意の文字と繰り返し(){
 
 		Pattern pattern;
 
@@ -106,6 +106,31 @@ public class Javaの正規表現 {
 		assertThat(pattern.matcher("B").matches(), is(false));
 		assertThat(pattern.matcher("").matches(), is(false));
 
+		//{n}:直前の文字にn回マッチする
+		pattern = Pattern.compile("^A{3}");
+		assertThat(pattern.matcher("AAA").find(), is(true));
+		assertThat(pattern.matcher("AA").find(), is(false));
+		assertThat(pattern.matcher("AAAA").find(), is(false));
+
+		//{n,}:直前の文字にn回以上マッチする
+		pattern = Pattern.compile("^A{3,}");
+		assertThat(pattern.matcher("AAA").find(), is(true));
+		assertThat(pattern.matcher("AAAA").find(), is(true));
+		assertThat(pattern.matcher("AA").find(), is(false));
+
+		//{n,m}:直前の文字にn回以上m回以下マッチする
+		pattern = Pattern.compile("^A{3,4}");
+		assertThat(pattern.matcher("AAA").find(), is(true));
+		assertThat(pattern.matcher("AAAA").find(), is(true));
+		assertThat(pattern.matcher("AA").find(), is(false));
+		assertThat(pattern.matcher("AAAAA").find(), is(false));
+	}
+
+	@Test
+	public void 最初と最後(){
+
+		Pattern pattern;
+
 		// 「^」先頭にマッチする
 		pattern = Pattern.compile("^ab");
 		assertThat(pattern.matcher("abcd").find(), is(true));
@@ -115,6 +140,12 @@ public class Javaの正規表現 {
 		pattern = Pattern.compile("ab$");
 		assertThat(pattern.matcher("cdab").find(), is(true));
 		assertThat(pattern.matcher("abcd").find(), is(false));
+	}
+
+	@Test
+	public void 定義済みの文字クラス(){
+
+		Pattern pattern;
 
 		//\d: 半角数値(0～9)にマッチする ※ [0-9]と同じ
 		pattern = Pattern.compile("\\d");
@@ -140,6 +171,18 @@ public class Javaの正規表現 {
 		assertThat(pattern.matcher("#$%&").find(), is(true));
 		assertThat(pattern.matcher("012_AbC").find(), is(false));
 
+		// \s: 空白文字:[ \t\n\x0B\f\r]
+		pattern = Pattern.compile("\\s");
+		assertThat(pattern.matcher(" ").find(), is(true));
+		assertThat(pattern.matcher("A C").find(), is(true));
+		assertThat(pattern.matcher("").find(), is(false));
+		assertThat(pattern.matcher("ABC").find(), is(false));
+	}
+
+	@Test
+	public void グループと組み合わせ(){
+
+		Pattern pattern;
 		//[ ]:いずれかの文字とマッチする
 		pattern = Pattern.compile("[ABC]");
 		assertThat(pattern.matcher("A").find(), is(true));
@@ -150,25 +193,6 @@ public class Javaの正規表現 {
 		pattern = Pattern.compile("(ABC)");
 		assertThat(pattern.matcher("ABC").find(), is(true));
 		assertThat(pattern.matcher("CBA").find(), is(false));
-
-		//{n}:直前の文字にn回マッチする
-		pattern = Pattern.compile("^A{3}$");
-		assertThat(pattern.matcher("AAA").find(), is(true));
-		assertThat(pattern.matcher("AA").find(), is(false));
-		assertThat(pattern.matcher("AAAA").find(), is(false));
-
-		//{n,}:直前の文字にn回以上マッチする
-		pattern = Pattern.compile("^A{3,}$");
-		assertThat(pattern.matcher("AAA").find(), is(true));
-		assertThat(pattern.matcher("AAAA").find(), is(true));
-		assertThat(pattern.matcher("AA").find(), is(false));
-
-		//{n,m}:直前の文字にn回以上m回以下マッチする
-		pattern = Pattern.compile("^A{3,4}$");
-		assertThat(pattern.matcher("AAA").find(), is(true));
-		assertThat(pattern.matcher("AAAA").find(), is(true));
-		assertThat(pattern.matcher("AA").find(), is(false));
-		assertThat(pattern.matcher("AAAAA").find(), is(false));
 
 		//|:いずれかとマッチする
 		pattern = Pattern.compile("ABC|DEF");

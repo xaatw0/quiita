@@ -22,3 +22,12 @@ code
 Markdownのエスケープ	\
 
 ~~打ち消し~~
+
+
+Gitレポジトリー→右クリック→ブランチへプッシュ
+プルリクエスト
+base master  compare-newBranch
+
+
+
+フェッチ→プル

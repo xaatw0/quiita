@@ -252,7 +252,7 @@ public class StreamAPIの主なメソッドと処理結果のOptionalクラス�
 
 		// 要素の中のどれか1つを取得
 		Optional<BigDecimal> any = list.stream().findAny();
-		assertThat(max.get(), is(anyOf(
+		assertThat(any.get(), is(anyOf(
 				is( BigDecimal.valueOf(1)),
 				is( BigDecimal.valueOf(2)),
 				is( BigDecimal.valueOf(3)),

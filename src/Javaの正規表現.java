@@ -334,7 +334,6 @@ public class Javaの正規表現 {
 	public void 日本語テキストへのマッチ(){
 
 		Pattern pattern;
-		Matcher matcher;
 
 		// ひらがな
 		pattern = Pattern.compile("[\u3040-\u309F]");

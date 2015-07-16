@@ -78,8 +78,6 @@ public class StreamAPIの主なメソッドと処理結果のOptionalクラス�
 
 		Integer[] array = {1,2,3,4,5,1,2,3,4,5};
 
-		Stream<Integer> stream1 = Arrays.stream(array);
-
 		// 要素を偶数のみに絞ります
 		Stream<Integer> filterStream =
 				Arrays.stream(array)
@@ -252,7 +250,7 @@ public class StreamAPIの主なメソッドと処理結果のOptionalクラス�
 
 		// 要素の中のどれか1つを取得
 		Optional<BigDecimal> any = list.stream().findAny();
-		assertThat(max.get(), is(anyOf(
+		assertThat(any.get(), is(anyOf(
 				is( BigDecimal.valueOf(1)),
 				is( BigDecimal.valueOf(2)),
 				is( BigDecimal.valueOf(3)),

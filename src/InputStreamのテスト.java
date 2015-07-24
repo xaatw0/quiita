@@ -2,6 +2,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.*;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -42,6 +43,34 @@ public class InputStreamのテスト {
 		assertThat(reader.readLine(), is(nullValue()));
 
 		reader.close();
+	}
+
+	@Test
+	public void byteArrayInputStream1行() throws IOException{
+
+		ByteArrayInputStream stream = new ByteArrayInputStream("test".getBytes());
+
+		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+		assertThat(reader.readLine(), is("test"));
+	}
+
+	@Test
+	public void byteArrayInputStream5行() throws IOException{
+
+		String SEP = System.getProperty("line.separator");
+
+		StringBuffer sb = new StringBuffer();
+		sb.append("AAA").append(SEP);
+		sb.append("BBB").append(SEP);
+		sb.append("CCC").append(SEP);
+
+		ByteArrayInputStream stream = new ByteArrayInputStream(sb.toString().getBytes());
+
+		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+		assertThat(reader.readLine(), is("AAA"));
+		assertThat(reader.readLine(), is("BBB"));
+		assertThat(reader.readLine(), is("CCC"));
+		assertThat(reader.readLine(), is(nullValue()));
 	}
 
 }

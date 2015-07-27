@@ -412,6 +412,13 @@ public class Javaの正規表現 {
 		assertThat(matcher.replaceAll("写真"), is("写真001.写真"));
 	}
 
+	@Test
+	public void 置換キャメル式スネーク式(){
+		Pattern pattern = Pattern.compile("(^|_)(.)");
+		Matcher matcher = pattern.matcher("this_is_a_pen");
+		assertThat(matcher.replaceAll("\\u$2"), is("ThisIsAPen"));
+	}
+
 	/**
 	 * 「メールアドレスの正規表現がめちゃめちゃ遅くなることがある件について」<br/>
 	 * (http://d.hatena.ne.jp/n_shuyo/20111020/regular_expression)<br/>

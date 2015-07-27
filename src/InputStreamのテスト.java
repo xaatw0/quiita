@@ -12,6 +12,13 @@ import java.io.InputStreamReader;
 import org.junit.Test;
 
 
+/**
+ Javaのアプリケーションをリリースするにあたり、jarファイルでまとめて、バッチファイルをクリックして実施できるようにしたい。
+ そのとき、設定ファイルはユーザでも編集できるようにjarファイルではなく、バッチファイルのある場所に置きたい。
+ 開発するときは設定ファイルの読み込みクラスのテストもしたい。
+
+
+ */
 public class InputStreamのテスト {
 
 	@Test

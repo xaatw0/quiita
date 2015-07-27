@@ -16,10 +16,11 @@ import org.junit.Test;
  Javaのアプリケーションをリリースするにあたり、jarファイルでまとめて、バッチファイルをクリックして実施できるようにしたい。
  そのとき、設定ファイルはユーザでも編集できるようにjarファイルではなく、バッチファイルのある場所に置きたい。
  開発するときは設定ファイルの読み込みクラスのテストもしたい。
+ その方法を検討した。
 
 
  */
-public class InputStreamのテスト {
+public class InputStreamTest {
 
 	@Test
 	public void inputstream() throws IOException {
@@ -79,5 +80,4 @@ public class InputStreamのテスト {
 		assertThat(reader.readLine(), is("CCC"));
 		assertThat(reader.readLine(), is(nullValue()));
 	}
-
 }

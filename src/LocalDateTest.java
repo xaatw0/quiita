@@ -30,6 +30,7 @@ public class LocalDateTest {
 		LocalDate date = LocalDate.of(2015, 10, 1);
 		assertThat(date.getYear(), is(2015));
 		assertThat(date.getMonth(), is(Month.OCTOBER));
+		assertThat(date.getMonthValue(), is(10));
 		assertThat(date.getDayOfMonth(), is(1));
 
 		assertThat(date.getDayOfYear(), is(274));

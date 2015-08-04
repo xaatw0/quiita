@@ -5,6 +5,7 @@ import static org.hamcrest.MatcherAssert.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 
 import org.junit.Test;
@@ -98,5 +99,20 @@ public class InputStreamMethodTest {
 		Map<String,String> result = target.read(stream);
 
 		assertThat(sb.toString(), is("stream was closed"));
+	}
+
+
+	@Test
+	public void closeFile() {
+
+		InputStream stream = getClass().getResourceAsStream("InputStreamMethodTest.txt");
+		InputStreamMethod target = new InputStreamMethod();
+		Map<String,String> result = target.read(stream);
+
+		try {
+			stream.read();
+			org.junit.Assert.fail("ファイルをcloseした状態でreadしているので、IOExceptionが発生するはず");
+		} catch (IOException e) {
+		}
 	}
 }

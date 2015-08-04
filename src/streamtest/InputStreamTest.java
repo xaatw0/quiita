@@ -1,3 +1,4 @@
+package streamtest;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.*;
 
@@ -63,7 +64,7 @@ public class InputStreamTest {
 	}
 
 	@Test
-	public void byteArrayInputStream5行() throws IOException{
+	public void byteArrayInputStream3行() throws IOException{
 
 		String SEP = System.getProperty("line.separator");
 
@@ -79,5 +80,27 @@ public class InputStreamTest {
 		assertThat(reader.readLine(), is("BBB"));
 		assertThat(reader.readLine(), is("CCC"));
 		assertThat(reader.readLine(), is(nullValue()));
+	}
+
+
+	public static void main(String[] arg) throws IOException{
+
+		// 設定ファイル
+		File envFile = null;
+
+		if (arg.length ==0){
+			// 実稼働(jarから呼び出すケース)
+			File jarDir = new File(System.getProperty("java.class.path")).getParentFile();
+			envFile = new File(jarDir, "env.ini");
+
+		} else if (arg.length == 1){
+			// テスト環境
+			envFile = new File(arg[0]);
+
+		} else {
+			System.err.println("java -jar test.jar");
+			System.err.println("java InputStreamTest env.ini ");
+			System.exit(-1);
+		}
 	}
 }

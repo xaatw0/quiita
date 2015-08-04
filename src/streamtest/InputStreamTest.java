@@ -1,4 +1,5 @@
 package streamtest;
+
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.*;
 
@@ -41,8 +42,9 @@ public class InputStreamTest {
 	@Test
 	public void file2InputStream() throws IOException{
 
-		// C:\Users\[ユーザ名]\git\quiita\src\InputStreamのテスト.txt
-		File file = new File("./src/InputStreamのテスト.txt");
+		// C:\Users\[ユーザ名]\git\quiita\src\streamtest\InputStreamのテスト.txt
+		// ルートは、ワークスペース
+		File file = new File("./src/streamtest/InputStreamのテスト.txt");
 		InputStream inputStream = new FileInputStream(file);
 
 		// InputStreamをReaderに変更

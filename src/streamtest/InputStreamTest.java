@@ -84,7 +84,6 @@ public class InputStreamTest {
 		assertThat(reader.readLine(), is(nullValue()));
 	}
 
-
 	public static void main(String[] arg) throws IOException{
 
 		// 設定ファイル

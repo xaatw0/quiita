@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.*;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.Map;
 
 import org.junit.Test;
@@ -73,5 +74,29 @@ public class InputStreamMethodTest {
 
 		InputStreamMethod target = new InputStreamMethod();
 		assertThat(target.read(stream), is(nullValue()));
+	}
+
+	/**
+	 * InputStreamMethod.readの内部でByteArrayInputStream streamを使用したInputStreamReaderをtryで囲んでいるが、この場合closeが呼ばれているか気になったのでテスト。呼ばれているようだ。
+	 */
+	@Test
+	public void close(){
+
+		final StringBuilder sb = new StringBuilder();
+
+		ByteArrayInputStream stream =
+				new ByteArrayInputStream("東北:青森県,岩手県,秋田県,宮城県,山形県,福島県".getBytes())
+				{
+					@Override
+					public void close() throws IOException{
+						sb.append("stream was closed");
+						super.close();
+					}
+				};
+
+		InputStreamMethod target = new InputStreamMethod();
+		Map<String,String> result = target.read(stream);
+
+		assertThat(sb.toString(), is("stream was closed"));
 	}
 }

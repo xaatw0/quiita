@@ -102,17 +102,14 @@ public class InputStreamMethodTest {
 	}
 
 
-	@Test
-	public void closeFile() {
+	@Test(expected = IOException.class)
+	public void closeFile() throws IOException {
 
 		InputStream stream = getClass().getResourceAsStream("InputStreamMethodTest.txt");
 		InputStreamMethod target = new InputStreamMethod();
 		Map<String,String> result = target.read(stream);
 
-		try {
-			stream.read();
-			org.junit.Assert.fail("ファイルをcloseした状態でreadしているので、IOExceptionが発生するはず");
-		} catch (IOException e) {
-		}
+		stream.read();
+		org.junit.Assert.fail("ファイルをcloseした状態でreadしているので、IOExceptionが発生するはず");
 	}
 }

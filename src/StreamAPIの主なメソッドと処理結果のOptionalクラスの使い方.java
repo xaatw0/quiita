@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.junit.Test;
@@ -143,6 +145,28 @@ public class StreamAPIの主なメソッドと処理結果のOptionalクラス�
 	    public List<Person> getChildren() {
 	        return children;
 	    }
+	}
+
+	@Test
+	public void Streamは変更せずに処理を加える(){
+		Person person1 = new Person("サンプル 太郎");
+		Person person2 = new Person("デモ 花子");
+
+		List<Person> list = new ArrayList<>();
+		list.add(person1);
+		list.add(person2);
+
+		// 最初は子供がいない
+		assertThat(list.stream().mapToInt(p-> p.getChildren().size()).sum(), is(0));
+
+		// peekでstream内の各Personに子供「test」を追加している。
+		// 2人に1人づつ追加しているので、合計が2になる
+		assertThat(list.stream()
+				.peek(p -> p.addChild(new Person("test")))
+				.mapToInt(p-> p.getChildren().size())
+				.sum(), is(2));
+
+		assertThat(person1.getChildren().size(), is(1));
 	}
 
 	@Test
@@ -367,4 +391,38 @@ public class StreamAPIの主なメソッドと処理結果のOptionalクラス�
 		assertThat(array[2], is(BigDecimal.TEN));
 
 	}
+
+	@Test
+	public void 要素をListSetとして返すメソッド(){
+
+		String[] array = {"A","B","C"};
+
+		List <String> list = Arrays.stream(array).collect(Collectors.toList());
+		assertThat(list.get(0), is("A"));
+		assertThat(list.get(1), is("B"));
+		assertThat(list.get(2), is("C"));
+
+		Set<String> set = Arrays.stream(array).collect(Collectors.toSet());
+		assertThat(set.contains("A"), is(true));
+		assertThat(set.contains("B"), is(true));
+		assertThat(set.contains("D"), is(false));
+
+		// Mapはよくわからずorz
+		//Map<String,Integer> map = Arrays.stream(array)
+		//		.collect(Collectors.toMap(t-> (t.toString(),Integer.valueOf(t.length()));
+
+	}
+
+	@Test
+	public void コレクター(){
+
+		String[] array = {"A","BC","DEF"};
+
+		//すべての文字列を連結
+		assertThat(Arrays.stream(array).collect(Collectors.joining(",")), is("A,BC,DEF"));
+
+
+
+	}
+
 }

@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.junit.Test;
+
 
 /**
  * 元ネタ:
@@ -407,10 +409,7 @@ public class StreamAPIの主なメソッドと処理結果のOptionalクラス�
 		assertThat(set.contains("B"), is(true));
 		assertThat(set.contains("D"), is(false));
 
-		// Mapはよくわからずorz
-		//Map<String,Integer> map = Arrays.stream(array)
-		//		.collect(Collectors.toMap(t-> (t.toString(),Integer.valueOf(t.length()));
-
+		//Mapで返すのは、「groupingBy_mappingコレクター()」を参照
 	}
 
 	@Test
@@ -421,8 +420,33 @@ public class StreamAPIの主なメソッドと処理結果のOptionalクラス�
 		//すべての文字列を連結
 		assertThat(Arrays.stream(array).collect(Collectors.joining(",")), is("A,BC,DEF"));
 
+		// 合計
+		assertThat(Arrays.stream(array).collect(Collectors.summingInt(s -> ((String) s).length())), is(6));
+		assertThat(Arrays.stream(array).mapToInt(p->p.length()).sum(), is(6));
 
+		// 平均
+		assertThat(Arrays.stream(array).collect(Collectors.averagingInt((s -> ((String) s).length()))), is(2.0));
+		assertThat(Arrays.stream(array).mapToInt(p->p.length()).average().getAsDouble(), is(2.0));
+	}
 
+	/**
+	 * (参考)http://qiita.com/komiya_atsushi/items/8daac1b90d73b958c725
+	 */
+	@Test
+	public void groupingBy_mappingコレクター(){
+
+		String[] array = {"A","BC","DEF","G","HIJ",""};
+
+		// Mapとグループ化
+		Map<Integer,List<String>> result =
+				Arrays.stream(array)
+				.collect(Collectors.groupingBy(String::length,
+					Collectors.mapping(String::toString, Collectors.toList())));
+
+		assertThat(result.size(), is(4));
+		assertThat(result.get(0).size(), is(1));
+		assertThat(result.get(1).size(), is(2));
+		assertThat(result.get(2).get(0), is("BC"));
 	}
 
 }

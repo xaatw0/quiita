@@ -19,7 +19,7 @@ public class OutputStreamMethodTest {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		target.write(out);
 
-		assertThat(out.toString(), is("北海道:北海道"));
+		assertThat(new String(out.toByteArray()), is("北海道:北海道"));
 	}
 
 	@Test
@@ -33,7 +33,7 @@ public class OutputStreamMethodTest {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		target.write(out);
 
-		assertThat(out.toString(), is("東北:岩手県,秋田県,青森県"));
+		assertThat(new String(out.toByteArray()), is("東北:岩手県,秋田県,青森県"));
 	}
 
 	@Test
@@ -56,7 +56,7 @@ public class OutputStreamMethodTest {
 				,"関東:栃木県,群馬県,茨城県"
 				};
 
-		assertThat(out.toString(), is(String.join(System.lineSeparator(), expected)));
+		assertThat(new String(out.toByteArray()), is(String.join(System.lineSeparator(), expected)));
 	}
 
 }

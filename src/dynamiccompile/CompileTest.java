@@ -33,7 +33,7 @@ public class CompileTest {
 	    private final String code;
 
 	    public DynamicJavaSourceCodeObject(String name, String code) {
-	        super(URI.create("string:///" + name.replaceAll(".", "/") + Kind.SOURCE.extension), Kind.SOURCE);
+	        super(URI.create("string:///" + name.replaceAll("\\.", "/") + Kind.SOURCE.extension), Kind.SOURCE);
 	        this.code = code ;
 	    }
 

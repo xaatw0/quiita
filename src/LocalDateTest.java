@@ -138,4 +138,13 @@ public class LocalDateTest {
 		assertThat(date.format(DateTimeFormatter.ISO_ORDINAL_DATE), is("2015-230"));
 		assertThat(date.format(DateTimeFormatter.ISO_WEEK_DATE), is("2015-W34-2"));
 	}
+
+	@Test
+	public void DateTimeFormatter(){
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+
+		LocalDate date = LocalDate.of(2015, 8, 18);
+		assertThat(date.format(formatter), is("2015/08/18"));
+	}
 }

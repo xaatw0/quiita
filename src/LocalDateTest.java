@@ -5,6 +5,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.Period;
+import java.time.format.DateTimeFormatter;
 
 import org.junit.Test;
 
@@ -116,4 +117,25 @@ public class LocalDateTest {
 		assertThat(period.toTotalMonths(),is(12L));
 	}
 
+	@Test
+	public void parse(){
+		LocalDate date = LocalDate.of(2015, 8, 18);
+		assertThat(LocalDate.parse("2015-08-18"), is(date));
+		assertThat(LocalDate.parse("2015-08-18", DateTimeFormatter.ISO_DATE), is(date));
+		assertThat(LocalDate.parse("2015-08-18", DateTimeFormatter.ISO_LOCAL_DATE), is(date));
+
+		assertThat(LocalDate.parse("20150818", DateTimeFormatter.BASIC_ISO_DATE), is(date));
+	}
+
+	@Test
+	public void format(){
+
+		// 2015年8月18日 230日目、34週の火曜日
+		LocalDate date = LocalDate.of(2015, 8, 18);
+		assertThat(date.format(DateTimeFormatter.ISO_DATE), is("2015-08-18"));
+		assertThat(date.format(DateTimeFormatter.ISO_LOCAL_DATE), is("2015-08-18"));
+		assertThat(date.format(DateTimeFormatter.BASIC_ISO_DATE), is("20150818"));
+		assertThat(date.format(DateTimeFormatter.ISO_ORDINAL_DATE), is("2015-230"));
+		assertThat(date.format(DateTimeFormatter.ISO_WEEK_DATE), is("2015-W34-2"));
+	}
 }

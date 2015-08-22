@@ -36,7 +36,7 @@ public class LocalDateTest {
 
 		assertThat(date.getDayOfYear(), is(274));
 		assertThat(date.getDayOfMonth(), is(1));
-		//assertThat(date.getDayOfWeek(), is(4)); // この表記はダメ
+		//assertThat(date.getDayOfWeek(), is(4)); // この書き方ではテスト失敗(コンパイルは通る)
 		assertThat(date.getDayOfWeek(), is(DayOfWeek.THURSDAY));
 	}
 
@@ -45,6 +45,7 @@ public class LocalDateTest {
 		LocalDate date = LocalDate.of(2015, Month.OCTOBER, 1);
 		assertThat(date.getYear(), is(2015));
 		assertThat(date.getMonth(), is(Month.OCTOBER));
+		assertThat(date.getMonthValue(), is(10));
 		assertThat(date.getDayOfMonth(), is(1));
 	}
 
@@ -115,6 +116,23 @@ public class LocalDateTest {
 		assertThat(period.getDays(),is(0));
 
 		assertThat(period.toTotalMonths(),is(12L));
+
+		period = Period.between(
+				LocalDate.of(2011, Month.JANUARY, 1),
+				LocalDate.of(2012, Month.FEBRUARY, 2));
+
+		assertThat(period.getYears(),is(1));
+		assertThat(period.getMonths(),is(1));
+		assertThat(period.getDays(),is(1));
+
+		// 開始日の方が未来日の場合、値はマイナスになる
+		period = Period.between(
+				LocalDate.of(2012, Month.FEBRUARY, 2),
+				LocalDate.of(2011, Month.JANUARY, 1));
+
+		assertThat(period.getYears(),is(-1));
+		assertThat(period.getMonths(),is(-1));
+		assertThat(period.getDays(),is(-1));
 	}
 
 	@Test
@@ -142,6 +160,7 @@ public class LocalDateTest {
 	@Test
 	public void DateTimeFormatter(){
 
+		// 出力する日付のフォーマットを変更する
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 
 		LocalDate date = LocalDate.of(2015, 8, 18);

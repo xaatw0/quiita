@@ -2,7 +2,11 @@
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,6 +17,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 
@@ -75,6 +80,19 @@ public class StreamAPIの主なメソッドと処理結果のOptionalクラス�
 		// 並列処理から直接処理に変換
 		Stream<String> sequentialStream = parallelStream1.sequential();
 		assertThat(sequentialStream.isParallel(), is(false));
+	}
+
+	@Test @Ignore
+	public void ファイルからStreamの生成() throws IOException{
+
+		// ファイルが必要なので、実行しない
+
+		// Pathから生成
+		Stream<String> stream1 = Files.lines(Paths.get("test"));
+
+		// BufferedReaderから生成
+		BufferedReader br = new BufferedReader(null);
+		Stream<String> stream2 = br.lines();
 	}
 
 	@Test

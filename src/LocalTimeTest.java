@@ -89,6 +89,21 @@ public class LocalTimeTest {
 	}
 
 	@Test
+	public void between_深夜越えの調整(){
+
+		// 22:00-6:00の夜間業務で、労働時間を取得する
+		LocalTime startTime = LocalTime.of(22, 00);
+		LocalTime endTime = LocalTime.of(6, 00);
+
+		// -16時間になる
+		long minutes = ChronoUnit.MINUTES.between(startTime, endTime);
+		assertThat(minutes, is((long) -16 * 60L ));
+
+		// マイナスの場合、24時間を足すと丁度よくなる
+		assertThat(24 * 60 + minutes, is(8 * 60L));
+	}
+
+	@Test
 	public void parse(){
 
 		assertThat(LocalTime.parse("12:34", DateTimeFormatter.ISO_TIME)
@@ -109,14 +124,15 @@ public class LocalTimeTest {
 				, is(LocalTime.of(2,4,30)));
 	}
 
-	/**
-	 * 「2:34」はエラー
-	 */
 	@Test(expected = DateTimeParseException.class)
-	public void parse_exception(){
+	public void parse_時間が一桁は無効(){
 		LocalTime.parse("2:34", DateTimeFormatter.ISO_LOCAL_TIME);
 	}
 
+	@Test(expected = DateTimeParseException.class)
+	public void parse_24時は無効(){
+		LocalTime.parse("24:00", DateTimeFormatter.ISO_LOCAL_TIME);
+	}
 	@Test
 	public void format(){
 		assertThat(LocalTime.of(2,4).format(DateTimeFormatter.ISO_TIME), is("02:04:00"));
@@ -137,6 +153,13 @@ public class LocalTimeTest {
 
 		assertThat(time1.isAfter(time2), is(false));
 		assertThat(time2.isAfter(time1), is(true));
+
+		// 同じ時刻は全てfalse
+		LocalTime time3 = LocalTime.of(1,0);
+		assertThat(time1.isBefore(time3), is(false));
+		assertThat(time3.isBefore(time1), is(false));
+		assertThat(time1.isAfter(time3), is(false));
+		assertThat(time3.isAfter(time1), is(false));
 	}
 
 	@Test

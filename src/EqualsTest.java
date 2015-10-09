@@ -188,10 +188,36 @@ public class EqualsTest {
 
 	@Test
 	public void child(){
-		EqualsTest target1 = new ChildEqualsTest();
-		EqualsTest target2 = new EqualsTest();
+		EqualsTest target1 = new EqualsTest();
+
+		// 子クラス
+		EqualsTest target2 = new ChildEqualsTest();
+
+		// 匿名クラス
+		EqualsTest target3 = new EqualsTest(){
+			@Override
+			public boolean equals(Object obj){
+				return super.equals(obj);
+			}
+		};
+
 		assertThat(target1.equals(target2), is(false));
 		assertThat(target1.myEquals(target2), is(true));
+
+		assertThat(target1.equals(target3), is(false));
+		assertThat(target1.myEquals(target3), is(true));
+
+		assertThat(target2.equals(target1), is(false));
+		assertThat(target2.myEquals(target1), is(true));
+
+		assertThat(target2.equals(target3), is(false));
+		assertThat(target2.myEquals(target3), is(true));
+
+		assertThat(target3.equals(target1), is(false));
+		assertThat(target3.myEquals(target1), is(true));
+
+		assertThat(target3.equals(target2), is(false));
+		assertThat(target3.myEquals(target2), is(true));
 	}
 
 	public class ChildEqualsTest extends EqualsTest{

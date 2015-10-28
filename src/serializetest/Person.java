@@ -15,20 +15,5 @@ public class Person implements Serializable{
 
 	public String getName(){return name;}
 	public int getAge(){ return age;}
-
-
-	private void writeObject(java.io.ObjectOutputStream stream)
-	        throws java.io.IOException {
-	    age = age >> 2;
-	    stream.defaultWriteObject();
-	}
-
-    private void readObject(java.io.ObjectInputStream stream)
-        throws java.io.IOException, ClassNotFoundException {
-
-    	stream.defaultReadObject();
-        age = age << 2;
-    }
-
 }
 

@@ -52,6 +52,28 @@ public class SerializeTest01 {
 	}
 
 	@Test
+	public void シリアライズのテスト2() throws IOException, ClassNotFoundException{
+
+		Person2 person = new Person2("test", 20);
+		assertThat(person, instanceOf(Serializable.class));
+
+		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		try(ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream)){
+			objectOutputStream.writeObject(person);
+		}
+
+		Person2 serializedPerson;
+
+		ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
+		try(ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream)){
+			serializedPerson = (Person2) objectInputStream.readObject();
+		}
+
+		assertThat(serializedPerson.getName(), is("test"));
+		assertThat(serializedPerson.getAge(), is(20));
+	}
+
+	@Test
 	public void シリアライズの暗号化テスト() throws IOException, ClassNotFoundException,
 			SignatureException, GeneralSecurityException {
 
@@ -152,7 +174,5 @@ public class SerializeTest01 {
 		try (ObjectOutputStream out = new ObjectOutputStream(byteArrayOutputStream)) {
 			out.writeObject(key);
 		}
-
-		System.out.println(new String(byteArrayOutputStream.toString()));
 	}
 }

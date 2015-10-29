@@ -30,11 +30,6 @@ public class MyModule extends AbstractModule {
 	public static void main(String[] args) {
 		Injector injector = Guice.createInjector(new MyModule());
 
-		IStringOutput<Integer> out =
-				injector.getInstance(Key.get(new TypeLiteral<StringOutput<Integer>>() {}));
-		System.out.println(out.converter(12));
-
-
 		Console<Integer> conInteger =
 				injector.getInstance(Key.get(new TypeLiteral<Console<Integer>>() {}));
 		conInteger.print(123);

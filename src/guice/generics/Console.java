@@ -4,12 +4,8 @@ import com.google.inject.Inject;
 
 public class Console<T> {
 
-	private final StringOutput<T> out;
-
 	@Inject
-	public Console(StringOutput<T> out) {
-		this.out = out;
-	}
+	private final IStringOutput<T> out = null;
 
 	public void print(T t) {
 		System.out.println(out.converter(t));

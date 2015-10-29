@@ -2,7 +2,11 @@
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,8 +15,11 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 
@@ -75,6 +82,30 @@ public class StreamAPIの主なメソッドと処理結果のOptionalクラス�
 		// 並列処理から直接処理に変換
 		Stream<String> sequentialStream = parallelStream1.sequential();
 		assertThat(sequentialStream.isParallel(), is(false));
+	}
+
+	@Test @Ignore
+	public void ファイルからStreamの生成() throws IOException{
+
+		// ファイルが必要なので、実行しない
+
+		// Pathから生成
+		try(Stream<String> stream1 = Files.lines(Paths.get("test"))){
+			// StreamはAutoCloseを実装しているので、これでファイルは閉じるらしい
+		}
+
+		// BufferedReaderから生成
+		BufferedReader br = new BufferedReader(null);
+		Stream<String> stream2 = br.lines();
+	}
+
+	@Test
+	public void 範囲からStreamの生成(){
+
+		assertThat(IntStream.range(0, 10).sum(), is(45));
+		assertThat(IntStream.rangeClosed(0, 10).sum(), is(55));
+
+		assertThat(LongStream.range(0, 10).sum(), is(45));
 	}
 
 	@Test
@@ -274,6 +305,10 @@ public class StreamAPIの主なメソッドと処理結果のOptionalクラス�
 		Optional<BigDecimal> first = list.stream().findFirst();
 		assertThat(first.get(), is(BigDecimal.valueOf(3)));
 
+		// 要素の3番目のものを取得
+		Optional<BigDecimal> third = list.stream().skip(2).findFirst();
+		assertThat(third.get(), is(BigDecimal.valueOf(5)));
+
 		// 要素の中のどれか1つを取得
 		Optional<BigDecimal> any = list.stream().findAny();
 		assertThat(any.get(), is(anyOf(
@@ -371,6 +406,12 @@ public class StreamAPIの主なメソッドと処理結果のOptionalクラス�
 		list.add(BigDecimal.ZERO);
 		list.add(BigDecimal.TEN);
 
+		BigDecimal[] bArray =list.stream().toArray(BigDecimal[]::new);
+
+		assertThat(bArray[0], is(BigDecimal.ONE));
+		assertThat(bArray[1], is(BigDecimal.ZERO));
+		assertThat(bArray[2], is(BigDecimal.TEN));
+
 		Object[] array = list.stream().toArray();
 		assertThat(array[0], is(BigDecimal.ONE));
 		assertThat(array[1], is(BigDecimal.ZERO));
@@ -391,6 +432,7 @@ public class StreamAPIの主なメソッドと処理結果のOptionalクラス�
 		assertThat(array[0], is(BigDecimal.ONE));
 		assertThat(array[1], is(BigDecimal.ZERO));
 		assertThat(array[2], is(BigDecimal.TEN));
+
 
 	}
 
@@ -418,7 +460,9 @@ public class StreamAPIの主なメソッドと処理結果のOptionalクラス�
 		String[] array = {"A","BC","DEF"};
 
 		//すべての文字列を連結
+		assertThat(Arrays.stream(array).collect(Collectors.joining()), is("ABCDEF"));
 		assertThat(Arrays.stream(array).collect(Collectors.joining(",")), is("A,BC,DEF"));
+		assertThat(Arrays.stream(array).collect(Collectors.joining(",","[","]")), is("[A,BC,DEF]"));
 
 		// 合計
 		assertThat(Arrays.stream(array).collect(Collectors.summingInt(s -> ((String) s).length())), is(6));

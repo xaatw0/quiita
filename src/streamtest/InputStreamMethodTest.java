@@ -28,12 +28,11 @@ public class InputStreamMethodTest {
 
 	@Test
 	public void read3行(){
-		String SEP = System.getProperty("line.separator");
 
 		StringBuffer sb = new StringBuffer();
-		sb.append("北海道:北海道").append(SEP);
-		sb.append("東北:青森県,岩手県,秋田県,宮城県,山形県,福島県").append(SEP);
-		sb.append("関東:茨城県,栃木県,群馬県,埼玉県,千葉県,東京都,神奈川県").append(SEP);
+		sb.append("北海道:北海道").append(System.lineSeparator());
+		sb.append("東北:青森県,岩手県,秋田県,宮城県,山形県,福島県").append(System.lineSeparator());
+		sb.append("関東:茨城県,栃木県,群馬県,埼玉県,千葉県,東京都,神奈川県").append(System.lineSeparator());
 
 		ByteArrayInputStream stream = new ByteArrayInputStream(sb.toString().getBytes());
 

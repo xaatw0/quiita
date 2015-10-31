@@ -28,7 +28,8 @@ public class LocalTimeTest {
 		assertThat(t1123.getHour(), is(11));
 		assertThat(t1123.getMinute(), is(23));
 
-		// 11時23分45秒 と001ナノ秒
+		// 11時23分45秒 と1ナノ秒
+		// 1ナノ秒 = 0.000 000 001秒
 		LocalTime t112345 = LocalTime.of(11, 23,45,1);
 		assertThat(t112345.getHour(), is(11));
 		assertThat(t112345.getMinute(), is(23));
@@ -52,9 +53,12 @@ public class LocalTimeTest {
 
 	@Test
 	public void staticFinal(){
+
+		// 深夜の固定値
 		LocalTime midnight = LocalTime.of(0, 0);
 		assertThat(midnight, is(LocalTime.MIDNIGHT));
 
+		// 正午の固定値
 		LocalTime noon = LocalTime.of(12, 0);
 		assertThat(noon, is(LocalTime.NOON));
 	}
@@ -65,12 +69,15 @@ public class LocalTimeTest {
 		LocalTime startTime = LocalTime.of(21, 30);
 		LocalTime endTime = LocalTime.of(23, 00);
 
+		// 分単位で差分を取得
 		long minutes = ChronoUnit.MINUTES.between(startTime, endTime);
 		assertThat(minutes, is(90L));
 
+		// 時間単位で差分を取得
 		long hours = ChronoUnit.HOURS.between(startTime, endTime);
 		assertThat(hours, is(1L));
 
+		// 秒単位で差分を取得
 		long seconds = ChronoUnit.SECONDS.between(startTime, endTime);
 		assertThat(seconds , is((long) 60 * 60 + 30 * 60));
 	}
@@ -78,6 +85,7 @@ public class LocalTimeTest {
 	@Test
 	public void between_overnight(){
 
+		// 開始時間の方が後ろの時間の場合、マイナスになる
 		LocalTime startTime = LocalTime.of(21, 30);
 		LocalTime endTime = LocalTime.of(20, 00);
 
@@ -86,6 +94,19 @@ public class LocalTimeTest {
 
 		long hours = ChronoUnit.HOURS.between(startTime, endTime);
 		assertThat(hours, is(-1L));
+	}
+
+	@Test
+	public void 深夜勤務の業務時間(){
+
+		// 22:30から6:00勤務で、7.5時間勤務(7 * 60 + 30分勤務)
+		LocalTime startTime = LocalTime.of(22, 30);
+		LocalTime endTime = LocalTime.of(6, 00);
+
+		long minutes = ChronoUnit.MINUTES.between(startTime, endTime);
+		assertThat(minutes, is(- 60L * 16 - 30));
+
+		assertThat(minutes + 24 * 60, is(7 * 60L + 30) );
 	}
 
 	@Test

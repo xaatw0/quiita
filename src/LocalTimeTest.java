@@ -206,7 +206,7 @@ public class LocalTimeTest {
 
 		assertThat(truncate(false,  LocalTime.of(11, 46), 15), is(not(result)));
 		assertThat(truncate(false, LocalTime.of(11, 46), 30), is(result));
-}
+	}
 
 	/**
 	 * LocalTimeを指定の分で丸め込む

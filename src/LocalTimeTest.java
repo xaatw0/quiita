@@ -192,7 +192,7 @@ public class LocalTimeTest {
 	}
 
 	@Test
-	public void まるめこみ(){
+	public void 丸め込み(){
 		LocalTime result = LocalTime.of(11, 30);
 
 		assertThat(truncate(true,  LocalTime.of(11, 25,  1), 15), is(result));
@@ -204,20 +204,24 @@ public class LocalTimeTest {
 		assertThat(truncate(true,  LocalTime.of(11, 13), 15), is(not(result)));
 		assertThat(truncate(true,  LocalTime.of(11, 13), 30), is(result));
 
-		assertThat(truncate(true,  LocalTime.of(11, 46), 15), is(not(result)));
+		assertThat(truncate(false,  LocalTime.of(11, 46), 15), is(not(result)));
 		assertThat(truncate(false, LocalTime.of(11, 46), 30), is(result));
 }
 
+	/**
+	 * LocalTimeを指定の分で丸め込む
+	 * @param isStart true:後ろに丸め込む false:前に丸め込む
+	 * @param time 丸め込む時間
+	 * @param minutes 丸め込む分数
+	 * @return 丸め込まれた時間
+	 */
 	private LocalTime truncate(boolean isStart, LocalTime time, int minutes){
 
-		time = time.truncatedTo(ChronoUnit.MINUTES);
+		LocalTime truncated = time.truncatedTo(ChronoUnit.MINUTES);
+		int value = truncated.getMinute() % minutes;
 
-		int value = time.getMinute() % minutes;
-
-		if (value == 0){
-			return time;
-		}
-
-		return time.plusMinutes(isStart ? minutes - value : - value);
+		return value == 0 ?
+				truncated:
+				truncated.plusMinutes(isStart ? minutes - value : - value);
 	}
 }

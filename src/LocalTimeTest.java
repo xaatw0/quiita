@@ -190,4 +190,34 @@ public class LocalTimeTest {
 		assertThat(target.withSecond(0), is(LocalTime.of(11, 23,0,1)));
 		assertThat(target.withNano(0), is(LocalTime.of(11, 23,45)));
 	}
+
+	@Test
+	public void まるめこみ(){
+		LocalTime result = LocalTime.of(11, 30);
+
+		assertThat(truncate(true,  LocalTime.of(11, 25,  1), 15), is(result));
+		assertThat(truncate(true,  LocalTime.of(11, 30, 59), 15), is(result));
+
+		assertThat(truncate(false, LocalTime.of(11, 31,  1), 15), is(result));
+		assertThat(truncate(false, LocalTime.of(11, 44, 59), 15), is(result));
+
+		assertThat(truncate(true,  LocalTime.of(11, 13), 15), is(not(result)));
+		assertThat(truncate(true,  LocalTime.of(11, 13), 30), is(result));
+
+		assertThat(truncate(true,  LocalTime.of(11, 46), 15), is(not(result)));
+		assertThat(truncate(false, LocalTime.of(11, 46), 30), is(result));
+}
+
+	private LocalTime truncate(boolean isStart, LocalTime time, int minutes){
+
+		time = time.truncatedTo(ChronoUnit.MINUTES);
+
+		int value = time.getMinute() % minutes;
+
+		if (value == 0){
+			return time;
+		}
+
+		return time.plusMinutes(isStart ? minutes - value : - value);
+	}
 }

@@ -474,6 +474,33 @@ public class StreamAPIの主なメソッドと処理結果のOptionalクラス�
 
 		assertThat(map.get("サンプル 太郎"), is(1));
 		assertThat(map.get("デモ 花子"), is(2));
+
+		// Map key:名前 value: 子供のリスト
+		Map<String, List<Person>> mapChild = list.stream()
+				.collect( Collectors.toMap(Person::getName, Person::getChildren));
+
+		assertThat(mapChild.get("サンプル 太郎").size(), is(1));
+		assertThat(mapChild.get("デモ 花子").size(), is(2));
+
+	}
+
+	@Test
+	public void toMap_要素重複(){
+		String[] data = {"あ","い","うえ"};
+
+		Map<String, Integer> result = Arrays.stream(data).collect(Collectors.toMap(p->p.toString(), p->p.length()));
+
+		assertThat(result.get("あ"), is(1));
+		assertThat(result.get("い"), is(1));
+		assertThat(result.get("うえ"), is(2));
+	}
+
+	@Test(expected = IllegalStateException.class)
+	public void toMap_鍵重複(){
+
+		String[] data = {"あ","い","うえ"};
+		Arrays.stream(data).collect(Collectors.toMap(p->p.length(), p->p.toString()));
+		// java.lang.IllegalStateException: Duplicate key あ
 	}
 
 	@Test

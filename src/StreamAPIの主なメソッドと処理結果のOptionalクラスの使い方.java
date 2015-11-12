@@ -514,7 +514,4 @@ public class StreamAPIの主なメソッドと処理結果のOptionalクラス�
 		assertThat(result.get(1).size(), is(2));
 		assertThat(result.get(2).get(0), is("BC"));
 	}
-
-
-
 }

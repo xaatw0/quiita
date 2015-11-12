@@ -1,5 +1,8 @@
 package PDFBox;
 
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.*;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
@@ -8,17 +11,20 @@ import org.apache.pdfbox.io.RandomAccessRead;
 import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdfwriter.COSWriter;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
+import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.junit.Ignore;
 import org.junit.Test;
 
 public class WritePDF {
 
 	@Test
-	public void writeread() throws IOException {
+	public void writeRead() throws IOException {
 
 		byte[] buffer;
 
@@ -118,11 +124,31 @@ public class WritePDF {
 
 				// テキスト出力終了
 				contents.endText();
-
 			}
 
 			// pdfファイルを出力
 			doc.save("sample2.pdf");
+		}
+	}
+
+	@Test
+	public void read() throws IOException{
+		// PDFの読み込み
+		try (RandomAccessRead read = new RandomAccessBuffer(getClass().getResourceAsStream("PDFBox.pdf"))) {
+
+			PDFParser pdfParser = new PDFParser(read);
+			pdfParser.parse(); // 分析
+			try(PDDocument pdf = pdfParser.getPDDocument()){
+
+				PDDocumentCatalog docCatalog = pdf.getDocumentCatalog();
+				PDAcroForm acroForm = docCatalog.getAcroForm();
+
+			    //テキスト分解クラス生成
+			    PDFTextStripper stripper = new PDFTextStripper();
+			    //抽出＆出力実施
+			    String text = stripper.getText(pdf);
+			    assertThat(text.contains("PDFBox"), is(true));
+			}
 		}
 	}
 

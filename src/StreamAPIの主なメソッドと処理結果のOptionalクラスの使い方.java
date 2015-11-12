@@ -451,7 +451,29 @@ public class StreamAPIの主なメソッドと処理結果のOptionalクラス�
 		assertThat(set.contains("B"), is(true));
 		assertThat(set.contains("D"), is(false));
 
-		//Mapで返すのは、「groupingBy_mappingコレクター()」を参照
+	}
+
+	@Test
+	public void 要素をMapとして返すメソッド(){
+
+		Person person1 = new Person("サンプル 太郎");
+		person1.addChild(new Person("サンプル 小太郎"));
+
+		Person person2 = new Person("デモ 花子");
+		person2.addChild(new Person("デモ 小太郎"));
+		person2.addChild(new Person("デモ 小次郎"));
+
+		List<Person> list = new ArrayList<>();
+		list.add(person1);
+		list.add(person2);
+
+		// Map key:名前 value:子供の数
+		Map<String, Integer> map =
+				list.stream()
+				.collect( Collectors.toMap(p -> p.getName(), p -> p.getChildren().size()));
+
+		assertThat(map.get("サンプル 太郎"), is(1));
+		assertThat(map.get("デモ 花子"), is(2));
 	}
 
 	@Test
@@ -492,5 +514,4 @@ public class StreamAPIの主なメソッドと処理結果のOptionalクラス�
 		assertThat(result.get(1).size(), is(2));
 		assertThat(result.get(2).get(0), is("BC"));
 	}
-
 }

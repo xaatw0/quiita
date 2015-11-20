@@ -109,6 +109,12 @@ public class StreamAPIの主なメソッドと処理結果のOptionalクラス�
 		assertThat(IntStream.rangeClosed(0, 10).sum(), is(55));
 
 		assertThat(LongStream.range(0, 10).sum(), is(45L));
+
+		// Integerの連続した数の配列を生成する
+		Integer[] result = IntStream.range(10, 20).mapToObj(Integer::valueOf).toArray(Integer[]::new);
+		assertThat(result.length, is(10));
+		assertThat(result[0], is(Integer.valueOf(10)));
+		assertThat(result[9], is(Integer.valueOf(19)));
 	}
 
 	@Test

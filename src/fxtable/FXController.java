@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.stream.IntStream;
 
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,8 +16,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.converter.IntegerStringConverter;
 
 public class FXController implements Initializable{
 
@@ -57,10 +60,25 @@ public class FXController implements Initializable{
 		table.setItems(list);
 		table.setEditable(true);
 
+		// テーブルの行が選択されると、上記にメッセージがでる
+		/**
+		ChangeListener<Person> func = new ChangeListener<Person>() {
+			@Override
+			public void changed(ObservableValue<? extends Person> observableValue,
+					Person oldPerson, Person newPerson) {
+					 lblMessage.setText(newPerson.getName() + "が選択された");
+			}
+		};
+		 **/
+		table.getSelectionModel().selectedItemProperty().addListener(
+				(ObservableValue<? extends Person> observableValue, Person oldPerson, Person newPerson)
+				-> lblMessage.setText(newPerson.getName() + "が選択された"));
+
+
 		// 読み込み専用のセルの設定
 		// fxmlのIDにname,ageと設定しても、読んでくれなかった。
 		colName.setCellValueFactory(new PropertyValueFactory<Person, String>("name"));
-		colAge.setCellValueFactory(new PropertyValueFactory<Person, Integer>("age"));
+
 
 		// 編集可能なセルの設定
 		colAddress.setCellValueFactory(new PropertyValueFactory<Person, String>("address"));
@@ -68,6 +86,14 @@ public class FXController implements Initializable{
 
 		colAddress.setOnEditCommit(cell ->
 			list.get(cell.getTablePosition().getRow()).setAddress(cell.getNewValue()));
+
+		// 編集可能なコンボボックスのセル
+		colAge.setCellValueFactory(new PropertyValueFactory<Person, Integer>("age"));
+
+		Integer[] listAge = IntStream.range(10, 20).mapToObj(Integer::valueOf).toArray(Integer[]::new);
+		colAge.setCellFactory(ComboBoxTableCell.forTableColumn(new IntegerStringConverter(),
+				FXCollections.observableArrayList(listAge)));
+
 
 		// 参考に一つ入れておく
 		Person person = new Person();
@@ -77,7 +103,7 @@ public class FXController implements Initializable{
 
 		// 年齢の選択ボックスを設定する
 		ObservableList<Integer> lstAge = FXCollections.observableArrayList();
-		IntStream.range(13, 21).forEach(lstAge::add);
+		lstAge.addAll(listAge);
 		choiceAge.setItems(lstAge);
 	}
 

@@ -7,14 +7,12 @@ import java.util.stream.IntStream;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -50,7 +48,7 @@ public class FXController implements Initializable{
 	@FXML private Label lblMessage;
 
 	/** 人を表示するテーブルに表示するデータのリスト */
-	private ObservableList<Person> list = FXCollections.observableArrayList();
+	private final ObservableList<Person> list = FXCollections.observableArrayList();
 
 	@Override
 	public void initialize(URL paramURL, ResourceBundle paramResourceBundle) {
@@ -67,12 +65,9 @@ public class FXController implements Initializable{
 		// 編集可能なセルの設定
 		colAddress.setCellValueFactory(new PropertyValueFactory<Person, String>("address"));
 		colAddress.setCellFactory(TextFieldTableCell.forTableColumn());
-		colAddress.setOnEditCommit(new EventHandler<CellEditEvent<Person, String>>() {
-		    @Override
-		    public void handle(CellEditEvent<Person, String> cell) {
-		    	list.get(cell.getTablePosition().getRow()).setAddress(cell.getNewValue());
-		    }
-		});
+
+		colAddress.setOnEditCommit(cell ->
+			list.get(cell.getTablePosition().getRow()).setAddress(cell.getNewValue()));
 
 		// 参考に一つ入れておく
 		Person person = new Person();

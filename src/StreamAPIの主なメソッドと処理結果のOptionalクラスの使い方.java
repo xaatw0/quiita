@@ -9,10 +9,13 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -105,7 +108,7 @@ public class StreamAPIの主なメソッドと処理結果のOptionalクラス�
 		assertThat(IntStream.range(0, 10).sum(), is(45));
 		assertThat(IntStream.rangeClosed(0, 10).sum(), is(55));
 
-		assertThat(LongStream.range(0, 10).sum(), is(45));
+		assertThat(LongStream.range(0, 10).sum(), is(45L));
 	}
 
 	@Test
@@ -210,6 +213,16 @@ public class StreamAPIの主なメソッドと処理結果のOptionalクラス�
 				list.stream()
 				.sorted((e1,e2) -> e1.compareTo(e2));
 		assertThat(sortedStream.findFirst().get(), is("あ"));
+
+		sortedStream =
+				list.stream()
+				.sorted(Comparator.comparing(String::toString));
+		assertThat(sortedStream.findFirst().get(), is("あ"));
+
+		sortedStream =
+				list.stream()
+				.sorted(Comparator.comparing(String::toString).reversed());
+		assertThat(sortedStream.findFirst().get(), is("お"));
 
 		List<Integer> intList = Arrays.asList(3,2,1);
 		Stream<Integer> sortedStreamInt =
@@ -388,6 +401,8 @@ public class StreamAPIの主なメソッドと処理結果のOptionalクラス�
 		int[] intValues = {1,2,3,4,5};
 		assertThat(Arrays.stream(intValues).sum(), is(15));
 		assertThat(Arrays.stream(intValues).average().getAsDouble(), is(3.0));
+		assertThat(Arrays.stream(intValues).max().getAsInt(), is(5));
+		assertThat(Arrays.stream(intValues).min().getAsInt(), is(1));
 
 		long[] longValues = {1L,2L,3L,4L,5L};
 		assertThat(Arrays.stream(longValues).sum(), is(15L));
@@ -396,6 +411,30 @@ public class StreamAPIの主なメソッドと処理結果のOptionalクラス�
 		double[] doubleValues = {1.0,2.0,3.0,4.0,5.0};
 		assertThat(Arrays.stream(doubleValues).sum(), is(15.0));
 		assertThat(Arrays.stream(doubleValues).average().getAsDouble(), is(3.0));
+
+		// 合計と平均を同時に取得する
+		IntSummaryStatistics statistics = Arrays.stream(intValues).summaryStatistics();
+		assertThat(statistics.getCount(), is(5L));
+		assertThat(statistics.getAverage(), is(3.0));
+		assertThat(statistics.getSum(), is(15L));
+		assertThat(statistics.getMax(), is(5));
+		assertThat(statistics.getMin(), is(1));
+	}
+
+	@Test
+	public void SummaryStatisticsの合成() throws Exception {
+
+		int[] intValues1 = {1,2,3,4,5};
+		int[] intValues2 = {6,7,8,9,10};
+
+		IntSummaryStatistics statistics = Arrays.stream(intValues1).summaryStatistics();
+		statistics.combine(Arrays.stream(intValues2).summaryStatistics());
+
+		assertThat(statistics.getCount(), is(10L));
+		assertThat(statistics.getAverage(), is(5.5));
+		assertThat(statistics.getSum(), is(55L));
+		assertThat(statistics.getMax(), is(10));
+		assertThat(statistics.getMin(), is(1));
 	}
 
 	@Test
@@ -508,7 +547,7 @@ public class StreamAPIの主なメソッドと処理結果のOptionalクラス�
 
 		String[] array = {"A","BC","DEF"};
 
-		//すべての文字列を連結
+		//すべての文字列を連結(単に連結、間に文字を入れて連結、間と前後に文字を入れて連結)
 		assertThat(Arrays.stream(array).collect(Collectors.joining()), is("ABCDEF"));
 		assertThat(Arrays.stream(array).collect(Collectors.joining(",")), is("A,BC,DEF"));
 		assertThat(Arrays.stream(array).collect(Collectors.joining(",","[","]")), is("[A,BC,DEF]"));
@@ -540,5 +579,33 @@ public class StreamAPIの主なメソッドと処理結果のOptionalクラス�
 		assertThat(result.get(0).size(), is(1));
 		assertThat(result.get(1).size(), is(2));
 		assertThat(result.get(2).get(0), is("BC"));
+	}
+
+	@Test
+	public void reduce(){
+		int[] values = {1,2,3,4,5,6,7,8,9,10};
+
+		// 引数が2つ(初期値有り)
+		int total = Arrays.stream(values).reduce(0, (x,y) -> x + y);
+		assertThat(total, is(55));
+
+		total = Arrays.stream(new int[]{}).reduce(0, (x,y) -> x + y);
+		assertThat(total, is(0));
+
+		// 引数が1つ(初期値無し)
+		OptionalInt optTotal = Arrays.stream(values).reduce((x,y) -> x + y);
+		assertThat(optTotal.getAsInt(), is(55));
+
+		optTotal = Arrays.stream(new int[]{}).reduce((x,y) -> x + y);
+		assertThat(optTotal.isPresent(), is(false));
+
+		// 引数が3つ(3つめは並列の時のみ有効)
+		String[] str = {"あ","い","う","え","お"};
+
+		String appened = Arrays.stream(str).reduce("最初", (v1,v2) -> v1 + v2, (r1,r2) -> r1 +"連結"+ r2);
+		assertThat(appened, is("最初あいうえお"));
+
+		appened = Arrays.stream(str).parallel().reduce("最初", (v1,v2) -> v1 + v2, (r1,r2) -> r1 +"連結"+ r2);
+		assertThat(appened, is("最初あ連結最初い連結最初う連結最初え連結最初お"));
 	}
 }

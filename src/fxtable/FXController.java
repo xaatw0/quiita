@@ -7,51 +7,72 @@ import java.util.stream.IntStream;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 
 public class FXController implements Initializable{
 
-	@FXML
-	private TableView<Person> table;
+	/** 人を表示するテーブル */
+	@FXML private TableView<Person> table;
 
-	@FXML
-	private TextField txtName;
+	/** 名前の入力欄*/
+	@FXML private TextField txtName;
 
-	@FXML
-	private ChoiceBox<Integer> choiceAge;
+	/** 年齢の選択肢*/
+	@FXML private ChoiceBox<Integer> choiceAge;
 
-	@FXML
-	private Button btnAdd;
+	/** 追加ボタン*/
+	@FXML private Button btnAdd;
 
-	@FXML
-	private Button btnDelete;
+	/** 削除ボタン*/
+	@FXML private Button btnDelete;
 
-	@FXML
-	private TableColumn<Person, String> colName;
+	/** 氏名の列*/
+	@FXML private TableColumn<Person, String> colName;
 
-	@FXML
-	private TableColumn<Person, Integer> colAge;
+	/** 住所の列*/
+	@FXML private TableColumn<Person, String> colAddress;
 
-	@FXML
-	private Label lblMessage;
+	/** 年齢の列*/
+	@FXML private TableColumn<Person, Integer> colAge;
 
-	ObservableList<Person> list = FXCollections.observableArrayList();
+	/** 上部のメッセージ欄*/
+	@FXML private Label lblMessage;
+
+	/** 人を表示するテーブルに表示するデータのリスト */
+	private ObservableList<Person> list = FXCollections.observableArrayList();
 
 	@Override
 	public void initialize(URL paramURL, ResourceBundle paramResourceBundle) {
-		table.setItems(list);
 
+		// テーブルに表示するリストを設定
+		table.setItems(list);
+		table.setEditable(true);
+
+		// 読み込み専用のセルの設定
 		// fxmlのIDにname,ageと設定しても、読んでくれなかった。
 		colName.setCellValueFactory(new PropertyValueFactory<Person, String>("name"));
 		colAge.setCellValueFactory(new PropertyValueFactory<Person, Integer>("age"));
+
+		// 編集可能なセルの設定
+		colAddress.setCellValueFactory(new PropertyValueFactory<Person, String>("address"));
+		colAddress.setCellFactory(TextFieldTableCell.forTableColumn());
+		colAddress.setOnEditCommit(new EventHandler<CellEditEvent<Person, String>>() {
+		    @Override
+		    public void handle(CellEditEvent<Person, String> cell) {
+		    	list.get(cell.getTablePosition().getRow()).setAddress(cell.getNewValue());
+		    }
+		});
 
 		// 参考に一つ入れておく
 		Person person = new Person();

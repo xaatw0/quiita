@@ -19,8 +19,9 @@
    <center>
       <TableView fx:id="table" prefHeight="130.0" prefWidth="266.0" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn fx:id="colName" prefWidth="166.0" text="名前" />
-          <TableColumn fx:id="colAge" prefWidth="53.0" text="年齢" />
+          <TableColumn fx:id="colName" prefWidth="95.0" text="名前" />
+            <TableColumn fx:id="colAddress" prefWidth="101.0" text="住所" />
+          <TableColumn fx:id="colAge" prefWidth="61.0" text="年齢" />
         </columns>
       </TableView>
    </center>

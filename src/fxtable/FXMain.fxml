@@ -5,4 +5,26 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane prefHeight="116.0" prefWidth="224.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxtable.FXController" />
+<BorderPane prefHeight="178.0" prefWidth="258.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxtable.FXController">
+   <bottom>
+      <HBox prefHeight="18.0" prefWidth="224.0" BorderPane.alignment="CENTER">
+         <children>
+            <TextField fx:id="txtName" prefHeight="23.0" prefWidth="123.0" />
+            <ChoiceBox fx:id="choiceAge" prefHeight="23.0" prefWidth="52.0" />
+            <Button fx:id="btnAdd" mnemonicParsing="false" onAction="#addPerson" text="追加" />
+            <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#deletePerson" text="削除" />
+         </children>
+      </HBox>
+   </bottom>
+   <center>
+      <TableView fx:id="table" prefHeight="130.0" prefWidth="266.0" BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn fx:id="colName" prefWidth="166.0" text="名前" />
+          <TableColumn fx:id="colAge" prefWidth="53.0" text="年齢" />
+        </columns>
+      </TableView>
+   </center>
+   <top>
+      <Label fx:id="lblMessage" prefHeight="19.0" prefWidth="248.0" BorderPane.alignment="CENTER" />
+   </top>
+</BorderPane>

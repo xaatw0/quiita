@@ -11,8 +11,6 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 
 public class Person {
 
@@ -33,30 +31,18 @@ public class Person {
 
 	private BooleanProperty male = new SimpleBooleanProperty();
 	public BooleanProperty maleProperty(){return male;}
-	public boolean getMale(){return maleProperty().get();}
-	public void setMale(boolean male){maleProperty().set(male);}
+	public Boolean getMale(){return maleProperty().get();}
+	public void setMale(Boolean male){maleProperty().set(male);}
 
 	private Property<Person> partner = new SimpleObjectProperty<Person>();
 	public Property<Person> partnerProperty(){ return partner;}
 	public Person getPartner(){ return partnerProperty().getValue();}
 	public void setPartner(Person partner){partnerProperty().setValue(partner);}
 
-	public Person() {
-		male.addListener(new ChangeListener<Boolean>() {
-
-			  public void changed(ObservableValue<? extends Boolean> ov,Boolean t, Boolean t1) {
-
-			  System.out.println(nameProperty().get() + " invited: " + maleProperty().getValue().toString());
-
-
-			  }
-
-			  });	// TODO 自動生成されたコンストラクター・スタブ
-	}
 
 	@Override
 	public String toString(){
-		return  Stream.of(getName(),getAddress(), getMale()?"男":"女"+"性")
+		return  Stream.of(getName(),getAddress(), getMale()?"男性":"女性")
 				.collect(Collectors.joining(",","Person[","]"));
 	}
 

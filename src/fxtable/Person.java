@@ -31,8 +31,8 @@ public class Person {
 
 	private BooleanProperty male = new SimpleBooleanProperty();
 	public BooleanProperty maleProperty(){return male;}
-	public Boolean getMale(){return maleProperty().get();}
-	public void setMale(Boolean male){maleProperty().set(male);}
+	public boolean getMale(){return maleProperty().get();}
+	public void setMale(boolean male){maleProperty().set(male);}
 
 	private Property<Person> partner = new SimpleObjectProperty<Person>();
 	public Property<Person> partnerProperty(){ return partner;}

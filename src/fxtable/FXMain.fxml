@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane prefHeight="178.0" prefWidth="258.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxtable.FXController">
+<BorderPane prefHeight="172.0" prefWidth="408.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxtable.FXController">
    <bottom>
       <HBox prefHeight="18.0" prefWidth="224.0" BorderPane.alignment="CENTER">
          <children>
@@ -22,6 +22,8 @@
           <TableColumn fx:id="colName" prefWidth="95.0" text="名前" />
             <TableColumn fx:id="colAddress" prefWidth="101.0" text="住所" />
           <TableColumn fx:id="colAge" prefWidth="61.0" text="年齢" />
+            <TableColumn fx:id="colMale" prefWidth="29.0" text="男性" />
+            <TableColumn fx:id="colPatner" prefWidth="121.0" text="相方" />
         </columns>
       </TableView>
    </center>

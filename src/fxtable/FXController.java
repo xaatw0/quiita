@@ -14,11 +14,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.Callback;
 import javafx.util.converter.IntegerStringConverter;
 
 public class FXController implements Initializable{
@@ -47,6 +50,12 @@ public class FXController implements Initializable{
 	/** 年齢の列*/
 	@FXML private TableColumn<Person, Integer> colAge;
 
+	/** 性別の列*/
+	@FXML private TableColumn<Person, Boolean> colMale;
+
+	/** 相方の列*/
+	@FXML private TableColumn<Person, Person> colPatner;
+
 	/** 上部のメッセージ欄*/
 	@FXML private Label lblMessage;
 
@@ -70,9 +79,12 @@ public class FXController implements Initializable{
 			}
 		};
 		 **/
+
 		table.getSelectionModel().selectedItemProperty().addListener(
-				(ObservableValue<? extends Person> observableValue, Person oldPerson, Person newPerson)
-				-> lblMessage.setText(newPerson.getName() + "が選択された"));
+				(ObservableValue<? extends Person> observableValue, Person oldPerson, Person newPerson) -> {
+					if(newPerson != null)
+						lblMessage.setText(newPerson.toString() + "が選択されました");
+				});
 
 
 		// 読み込み専用のセルの設定
@@ -84,9 +96,10 @@ public class FXController implements Initializable{
 		colAddress.setCellValueFactory(new PropertyValueFactory<Person, String>("address"));
 		colAddress.setCellFactory(TextFieldTableCell.forTableColumn());
 
+		/**  住所に特殊な設定が必要なとき
 		colAddress.setOnEditCommit(cell ->
-			list.get(cell.getTablePosition().getRow()).setAddress(cell.getNewValue()));
-
+		list.get(cell.getTablePosition().getRow()).setAddress(cell.getNewValue()));
+		 **/
 		// 編集可能なコンボボックスのセル
 		colAge.setCellValueFactory(new PropertyValueFactory<Person, Integer>("age"));
 
@@ -94,6 +107,42 @@ public class FXController implements Initializable{
 		colAge.setCellFactory(ComboBoxTableCell.forTableColumn(new IntegerStringConverter(),
 				FXCollections.observableArrayList(listAge)));
 
+		// 性別のチェック欄
+
+		colMale.setCellValueFactory(new PropertyValueFactory<Person, Boolean>("male"));
+		colMale.setCellFactory(CheckBoxTableCell.forTableColumn(colMale));
+
+		/**
+		colMale.setCellFactory(new Callback<TableColumn<Person,Boolean>, TableCell<Person,Boolean>>() {
+
+			@Override
+			public TableCell<Person, Boolean> call(TableColumn<Person, Boolean> param) {
+
+				return new CheckBoxTableCell<Person, Boolean>(){
+					@Override
+					public void commitEdit(Boolean newValue){
+
+					}
+				};
+			}
+
+
+        });**/
+
+		colMale.setEditable(true);
+		colMale.setCellValueFactory(
+				new Callback<CellDataFeatures<Person,Boolean>,ObservableValue<Boolean>>()
+				{
+					@Override
+				    public ObservableValue<Boolean> call(CellDataFeatures<Person,Boolean> param)
+				    {
+						Person person = param.getValue();
+					    return null;
+				    }
+				});
+		colMale.setOnEditCommit(cell->{
+			cell.getNewValue();
+		});
 
 		// 参考に一つ入れておく
 		Person person = new Person();

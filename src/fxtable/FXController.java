@@ -13,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -20,8 +21,16 @@ import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.Callback;
+import javafx.util.StringConverter;
 import javafx.util.converter.IntegerStringConverter;
 
+
+/**
+ * @author sakura
+ *http://kazyury.hatenadiary.jp/entry/2013/04/08/225253
+ *http://aoe-tk.hatenablog.com/entry/20131206/1386345344
+ */
 public class FXController implements Initializable{
 
 	/** 人を表示するテーブル */
@@ -110,12 +119,42 @@ public class FXController implements Initializable{
 		colMale.setCellValueFactory(new PropertyValueFactory<Person, Boolean>("male"));
 		colMale.setCellFactory(CheckBoxTableCell.forTableColumn(colMale));
 
+		// 相方のコンボボックス
+		colPatner.setCellValueFactory(new PropertyValueFactory<Person, Person>("partner"));
+		//colPatner.setCellFactory(ComboBoxTableCell.forTableColumn(FXCollections.observableArrayList(list)));
+		colPatner.setCellFactory(
+				new Callback<TableColumn<Person,Person>, TableCell<Person,Person>>() {
+
+			@Override
+			public TableCell<Person, Person> call(TableColumn<Person, Person> param) {
+
+				StringConverter<Person> converter = new StringConverter<Person>() {
+
+					@Override
+					public Person fromString(String s) {
+						Person person = new Person();
+						person.setName(s);
+						return person;
+					}
+
+					@Override
+					public String toString(Person person) {
+						return person == null ? null: person.getName();
+					}
+				};
+
+				return new ComboBoxTableCell<Person, Person>(converter ,list);
+			}
+		});
+
 
 		// 参考に一つ入れておく
 		Person person = new Person();
 		person.setName("あいうえお");
 		person.setAge(15);
 		list.add(person);
+
+
 
 		// 年齢の選択ボックスを設定する
 		ObservableList<Integer> lstAge = FXCollections.observableArrayList();

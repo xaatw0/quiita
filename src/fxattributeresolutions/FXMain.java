@@ -1,10 +1,10 @@
-package fxbind;
+package fxattributeresolutions;
 
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 
@@ -18,7 +18,7 @@ public class FXMain extends Application {
 
 			FXMLLoader loader = new FXMLLoader();
 			loader.load(getClass().getResource(FXML_NAME).openStream());
-			Pane root = loader.getRoot();
+			VBox root = loader.getRoot();
 			Scene scene = new Scene(root);
 
 			primaryStage.setScene(scene);

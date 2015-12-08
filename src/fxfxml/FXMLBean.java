@@ -139,10 +139,4 @@ public class FXMLBean {
 		this.abbreviation = abbreviation;
 	}**/
 
-
-
-
-
-
-
 }

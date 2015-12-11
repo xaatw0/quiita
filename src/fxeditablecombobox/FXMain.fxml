@@ -5,10 +5,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-
 <BorderPane prefHeight="61.0" prefWidth="146.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxeditablecombobox.FXController">
    <center>
-      <ComboBox fx:id="cmbTitle" prefWidth="150.0" BorderPane.alignment="CENTER" />
+      <ComboBox fx:id="cmbTitle" onAction="#changedCmbMenu" prefWidth="150.0" BorderPane.alignment="CENTER" />
    </center>
    <bottom>
       <HBox prefHeight="27.0" prefWidth="224.0" BorderPane.alignment="CENTER">

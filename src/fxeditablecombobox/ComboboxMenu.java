@@ -18,7 +18,7 @@ public class ComboboxMenu {
 	public String getTitle() {return title.get();}
 	public void setTitle(String value){ title.set(value);}
 
-	public class ComboboxMenuConverter extends StringConverter<ComboboxMenu>{
+	public static class ComboboxMenuConverter extends StringConverter<ComboboxMenu>{
 
 		@Override
 		public String toString(ComboboxMenu object) {

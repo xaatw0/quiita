@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="224.0" prefWidth="296.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxbind.FXController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="266.0" prefWidth="296.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxbind.FXController">
    <children>
       <CheckBox fx:id="checkBox1" layoutX="29.0" layoutY="24.0" mnemonicParsing="false" prefHeight="16.0" prefWidth="186.0" text="チェックボックス1(2とBindBi)">
          <contextMenu>
@@ -22,5 +22,7 @@
       <CheckBox fx:id="checkBox4" layoutX="30.0" layoutY="104.0" mnemonicParsing="false" prefHeight="16.0" prefWidth="140.0" text="チェックボックス4" />
       <CheckBox fx:id="checkBox5" layoutX="109.0" layoutY="181.0" mnemonicParsing="false" prefHeight="16.0" prefWidth="170.0" text="独立プロパティと連動" />
       <Label fx:id="lblCheckbox5" layoutX="133.0" layoutY="203.0" prefHeight="15.0" prefWidth="107.0" text="独立プロパティ" />
+      <ComboBox fx:id="cmbBox" layoutX="25.0" layoutY="229.0" prefWidth="150.0" />
+      <Label fx:id="lblCmbBox" layoutX="187.0" layoutY="233.0" prefHeight="15.0" prefWidth="67.0" text="Label" />
    </children>
 </Pane>

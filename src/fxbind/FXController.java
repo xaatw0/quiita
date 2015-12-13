@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 
 public class FXController implements Initializable{
@@ -25,6 +26,9 @@ public class FXController implements Initializable{
 	@FXML Button button;
 	@FXML Label label;
 	@FXML Label lblCheckbox5;
+
+	@FXML ComboBox<String> cmbBox;
+	@FXML Label lblCmbBox;
 
 	BooleanProperty blnBindBidirectional = new SimpleBooleanProperty();
 
@@ -46,6 +50,8 @@ public class FXController implements Initializable{
 
 		checkBox5.selectedProperty().bindBidirectional(blnBindBidirectional);
 		lblCheckbox5.textProperty().bind(blnBindBidirectional.asString());
+		cmbBox.editableProperty().bind(blnBindBidirectional);;
+
 	}
 
 	@FXML

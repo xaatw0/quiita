@@ -113,4 +113,65 @@ public class BindingTest {
 	       assertThat(blnEquqls10.get(), is(false));
 	       assertThat(blnGreaterThan10.get(), is(true));
 	}
+
+	@Test
+	public void BooleanBindAnd(){
+		 BooleanProperty boolean1 = new SimpleBooleanProperty();
+		 BooleanProperty boolean2 = new SimpleBooleanProperty();
+
+		 BooleanProperty result = new SimpleBooleanProperty();
+		 result.bind(boolean1.and(boolean2));
+
+		 assertThat(result.get(), is(false));
+
+		 boolean1.set(true);
+		 assertThat(result.get(), is(false));
+
+		 boolean2.set(true);
+		 assertThat(result.get(), is(true));
+	}
+
+	@Test
+	public void BooleanBindOr(){
+		 BooleanProperty boolean1 = new SimpleBooleanProperty();
+		 BooleanProperty boolean2 = new SimpleBooleanProperty();
+
+		 BooleanProperty result = new SimpleBooleanProperty();
+		 result.bind(boolean1.or(boolean2));
+
+		 assertThat(result.get(), is(false));
+
+		 boolean1.set(true);
+		 assertThat(result.get(), is(true));
+
+		 boolean2.set(true);
+		 assertThat(result.get(), is(true));
+	}
+
+	@Test
+	public void BooleanBindAndOr(){
+		// 1 and (2 or 3)
+
+		BooleanProperty boolean1 = new SimpleBooleanProperty();
+		BooleanProperty boolean2 = new SimpleBooleanProperty();
+		BooleanProperty boolean3 = new SimpleBooleanProperty();
+
+		BooleanProperty result = new SimpleBooleanProperty();
+		result.bind(boolean1.and(boolean2.or(boolean3)));
+
+		assertThat(result.get(), is(false));
+
+		boolean1.set(true);
+		assertThat(result.get(), is(false));
+
+		boolean2.set(true);
+		assertThat(result.get(), is(true));
+
+		boolean2.set(false);
+		boolean3.set(true);
+		assertThat(result.get(), is(true));
+
+		boolean1.set(false);
+		assertThat(result.get(), is(false));
+	}
 }

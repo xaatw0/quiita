@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane prefHeight="61.0" prefWidth="146.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxeditablecombobox.FXController">
+   <center>
+      <ComboBox fx:id="cmbTitle" onAction="#changedCmbMenu" prefWidth="150.0" BorderPane.alignment="CENTER" />
+   </center>
+   <bottom>
+      <HBox prefHeight="27.0" prefWidth="224.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button mnemonicParsing="false" onAction="#addMenu" prefHeight="23.0" prefWidth="58.0" text="追加" />
+            <Button mnemonicParsing="false" onAction="#deleteMenu" prefHeight="23.0" prefWidth="57.0" text="削除" />
+         </children>
+      </HBox>
+   </bottom>
+</BorderPane>

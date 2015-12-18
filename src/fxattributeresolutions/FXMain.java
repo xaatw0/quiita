@@ -24,6 +24,8 @@ public class FXMain extends Application {
 			primaryStage.setScene(scene);
 			primaryStage.show();
 
+			scene.getStylesheets().add(getClass().getResource("fx.css").toExternalForm());
+
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

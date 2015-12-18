@@ -8,6 +8,8 @@ import javafx.util.StringConverter;
 
 public class ComboboxMenu {
 
+	public final static int INIALIZED = -1;
+
 	private IntegerProperty id = new SimpleIntegerProperty();
 	public IntegerProperty idProperty() {return id;}
 	public int getId(){ return idProperty().get();}
@@ -18,11 +20,16 @@ public class ComboboxMenu {
 	public String getTitle() {return title.get();}
 	public void setTitle(String value){ title.set(value);}
 
+	@Override
+	public String toString(){
+		return "ComboboxMenu[id: "+ getId() +", title:"+getTitle()+"]";
+	}
+
 	public static class ComboboxMenuConverter extends StringConverter<ComboboxMenu>{
 
 		@Override
 		public String toString(ComboboxMenu object) {
-			return object.getTitle();
+			return object == null ?"": object.getTitle();
 		}
 
 		@Override
@@ -30,6 +37,7 @@ public class ComboboxMenu {
 
 			ComboboxMenu menu = new ComboboxMenu();
 			menu.setTitle(string);
+			menu.setId(INIALIZED);
 			return menu;
 		}
 	}

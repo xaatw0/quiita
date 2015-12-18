@@ -5,10 +5,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="89.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="89.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxwindow.DatePanelController">
    <children>
-      <Button layoutX="66.0" layoutY="53.0" mnemonicParsing="false" text="Button" />
+      <Button layoutX="66.0" layoutY="53.0" mnemonicParsing="false" onAction="#btnOKPressed" text="OK" />
       <DatePicker layoutX="24.0" layoutY="21.0" />
    </children>
 </Pane>

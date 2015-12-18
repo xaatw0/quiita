@@ -8,7 +8,7 @@ import javafx.fxml.Initializable;
 public class TextPanelController implements Initializable, IPanel{
 
 	@Override
-	public String getResult() {
+	public Result getResult() {
 		// TODO 自動生成されたメソッド・スタブ
 		return null;
 	}
@@ -23,5 +23,11 @@ public class TextPanelController implements Initializable, IPanel{
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO 自動生成されたメソッド・スタブ
 
+	}
+
+	@Override
+	public String getText() {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
 	}
 }

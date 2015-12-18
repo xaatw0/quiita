@@ -15,13 +15,14 @@ public class MainWindowController implements Initializable, IPanel{
 	@FXML Label lblResult;
 	@FXML CheckBox chkDate;
 
+	Result result;
+
 	@Override
 	public void initialize(URL paramURL, ResourceBundle paramResourceBundle) {
 	}
 
 	@Override
-	public String getResult() {
-		// TODO 自動生成されたメソッド・スタブ
+	public Result getResult() {
 		return null;
 	}
 
@@ -32,6 +33,16 @@ public class MainWindowController implements Initializable, IPanel{
 
 	@FXML
 	public void btnOpenPressed(ActionEvent event){
+		IPanel panel = new DatePanelController();
+		FXMain.getInstance().changeWindow(panel);
 
+		if (panel.getResult() == Result.OK){
+			lblResult.setText(panel.getText());
+		}
+	}
+
+	@Override
+	public String getText() {
+		return null;
 	}
 }

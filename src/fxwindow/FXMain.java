@@ -6,15 +6,16 @@ import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 
 public class FXMain extends Application {
 
-	private final String FXML_NAME = "MainWindow.fxml";
-
 	private Stage stage;
+
+	private static FXMain instance;
+
+	private MainWindowController mainWindow;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -22,16 +23,9 @@ public class FXMain extends Application {
 		try {
 
 			stage = primaryStage;
+			instance = this;
 
-			MainWindowController firstWindows = new MainWindowController();
-
-			FXMLLoader loader = new FXMLLoader();
-			loader.load(getClass().getResource(FXML_NAME).openStream());
-			Pane root = loader.getRoot();
-			Scene scene = new Scene(root);
-
-			primaryStage.setScene(scene);
-			primaryStage.show();
+			changeWindow(mainWindow = new MainWindowController());
 
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -42,12 +36,30 @@ public class FXMain extends Application {
 		launch(args);
 	}
 
-	public void changeWindow(IPanel panel) throws IOException{
+	public static FXMain getInstance(){
+		return instance;
+	}
 
-		FXMLLoader loader = new FXMLLoader();
-		loader.load(getClass().getResource(panel.getFxml()).openStream());
+	public void changeWindow(IPanel panel){
 
-		stage.setScene(new Scene(loader.getRoot()));
-		stage.show();
+		try{
+			FXMLLoader loader = new FXMLLoader();
+			loader.load(getClass().getResource(panel.getFxml()).openStream());
+
+			stage.setScene(new Scene(loader.getRoot()));
+			stage.show();
+		} catch(IOException ex){
+			ex.printStackTrace();
+		}
+	}
+
+	public void backToMainWindow(){
+		changeWindow(mainWindow);
+	}
+
+	public void openWindow(IPanel panel){
+		Stage newState = new Stage();
+		newState.initOwner(stage);
+		newState.showAndWait();
 	}
 }

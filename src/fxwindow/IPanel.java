@@ -6,7 +6,9 @@ public interface IPanel {
 		OK,Cancel
 	}
 
-	String getResult();
+	Result getResult();
+
+	String getText();
 
 	String getFxml();
 }

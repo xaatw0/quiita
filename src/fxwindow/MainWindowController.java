@@ -34,7 +34,7 @@ public class MainWindowController implements Initializable, IPanel{
 	@FXML
 	public void btnOpenPressed(ActionEvent event){
 		IPanel panel = new DatePanelController();
-		FXMain.getInstance().changeWindow(panel);
+		FXMain.getInstance().openWindow(panel);
 
 		if (panel.getResult() == Result.OK){
 			lblResult.setText(panel.getText());

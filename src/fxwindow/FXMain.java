@@ -11,7 +11,9 @@ import javafx.stage.Stage;
 
 public class FXMain extends Application {
 
-	private Stage stage;
+	private Stage mainStage;
+
+	private Stage subStage;
 
 	private static FXMain instance;
 
@@ -22,7 +24,7 @@ public class FXMain extends Application {
 
 		try {
 
-			stage = primaryStage;
+			mainStage = primaryStage;
 			instance = this;
 
 			changeWindow(mainWindow = new MainWindowController());
@@ -46,20 +48,31 @@ public class FXMain extends Application {
 			FXMLLoader loader = new FXMLLoader();
 			loader.load(getClass().getResource(panel.getFxml()).openStream());
 
-			stage.setScene(new Scene(loader.getRoot()));
-			stage.show();
+			mainStage.setScene(new Scene(loader.getRoot()));
+			mainStage.show();
 		} catch(IOException ex){
 			ex.printStackTrace();
 		}
 	}
 
 	public void backToMainWindow(){
-		changeWindow(mainWindow);
+		subStage.close();
 	}
 
 	public void openWindow(IPanel panel){
+
 		Stage newState = new Stage();
-		newState.initOwner(stage);
+		newState.initOwner(mainStage);
+
+		try{
+			FXMLLoader loader = new FXMLLoader();
+			loader.load(getClass().getResource(panel.getFxml()).openStream());
+			newState.setScene(new Scene(loader.getRoot()));
+		} catch(IOException ex){
+			ex.printStackTrace();
+		}
+
+		subStage = newState;
 		newState.showAndWait();
 	}
 }

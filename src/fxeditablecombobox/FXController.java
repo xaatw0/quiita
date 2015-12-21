@@ -33,6 +33,11 @@ public class FXController implements Initializable{
 		cmbTitle.setEditable(true);
 
 		// コンボボックスに選択肢を追加
+		ComboboxMenu menu0 = new ComboboxMenu();
+		menu0.setId(-1);
+		menu0.setTitle("");
+		lstMenu.add(menu0);
+
 		ComboboxMenu menu1 = new ComboboxMenu();
 		menu1.setId(0);
 		menu1.setTitle("メニュー1");

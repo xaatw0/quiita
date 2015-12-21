@@ -22,6 +22,8 @@ public class ComboboxMenu {
 
 		@Override
 		public String toString(ComboboxMenu object) {
+
+			if (object == null) return "nothing";
 			return object.getTitle();
 		}
 

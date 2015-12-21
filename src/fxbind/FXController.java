@@ -71,6 +71,15 @@ public class FXController implements Initializable{
 		selectedData = new SimpleObjectProperty<>();
 		selectedData.bind(cmbBox.getSelectionModel().selectedItemProperty());
 		lblCmbBoxSelected.textProperty().bind(selectedData.asString());
+
+		cmbBox.getSelectionModel().selectedItemProperty().addListener((r,o,newValue) -> {
+			if (newValue == null){
+				lblCmbBox.textProperty().set("選択なし");
+			} else {
+				lblCmbBox.textProperty().set(newValue.getTitle());
+			}
+		});
+
 	}
 
 	@FXML

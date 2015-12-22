@@ -1,6 +1,6 @@
 package fxwindow;
 
-public interface IPanel {
+public interface IPanel<T> {
 
 	public enum Result{
 		OK,Cancel
@@ -11,4 +11,6 @@ public interface IPanel {
 	String getText();
 
 	String getFxml();
+
+	T getData();
 }

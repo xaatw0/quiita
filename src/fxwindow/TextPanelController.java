@@ -5,7 +5,7 @@ import java.util.ResourceBundle;
 
 import javafx.fxml.Initializable;
 
-public class TextPanelController implements Initializable, IPanel{
+public class TextPanelController implements Initializable, IPanel<String>{
 
 	@Override
 	public Result getResult() {
@@ -27,6 +27,12 @@ public class TextPanelController implements Initializable, IPanel{
 
 	@Override
 	public String getText() {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
+
+	@Override
+	public String getData() {
 		// TODO 自動生成されたメソッド・スタブ
 		return null;
 	}

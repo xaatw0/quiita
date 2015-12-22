@@ -10,7 +10,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 
 
-public class MainWindowController implements Initializable, IPanel{
+public class MainWindowController<T> implements Initializable, IPanel<Void>{
 
 	@FXML Label lblResult;
 	@FXML CheckBox chkDate;
@@ -37,12 +37,18 @@ public class MainWindowController implements Initializable, IPanel{
 		FXMain.getInstance().openWindow(panel);
 
 		if (panel.getResult() == Result.OK){
-			lblResult.setText(panel.getText());
+			lblResult.setText(panel.getData().toString());
 		}
 	}
 
 	@Override
 	public String getText() {
+		return null;
+	}
+
+	@Override
+	public Void getData() {
+		// TODO 自動生成されたメソッド・スタブ
 		return null;
 	}
 }

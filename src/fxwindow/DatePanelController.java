@@ -1,6 +1,7 @@
 package fxwindow;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
@@ -8,7 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.DatePicker;
 
-public class DatePanelController implements Initializable, IPanel{
+public class DatePanelController implements Initializable, IPanel<LocalDate>{
 
 	@FXML private DatePicker datePicker;
 
@@ -39,5 +40,10 @@ public class DatePanelController implements Initializable, IPanel{
 	public void btnOKPressed(ActionEvent event){
 		result = IPanel.Result.OK;
 		FXMain.getInstance().backToMainWindow();
+	}
+
+	@Override
+	public LocalDate getData() {
+		return datePicker.getValue();
 	}
 }

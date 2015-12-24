@@ -6,6 +6,7 @@ import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 
@@ -17,8 +18,6 @@ public class FXMain extends Application {
 
 	private static FXMain instance;
 
-	private MainWindowController mainWindow;
-
 	@Override
 	public void start(Stage primaryStage) {
 
@@ -27,7 +26,7 @@ public class FXMain extends Application {
 			mainStage = primaryStage;
 			instance = this;
 
-			changeWindow(mainWindow = new MainWindowController());
+			changeWindow(new MainWindowController());
 
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -63,6 +62,7 @@ public class FXMain extends Application {
 
 		Stage newState = new Stage();
 		newState.initOwner(mainStage);
+		newState.initModality(Modality.APPLICATION_MODAL);
 
 		IPanel controller = null;
 

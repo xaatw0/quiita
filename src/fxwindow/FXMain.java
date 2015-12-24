@@ -59,20 +59,25 @@ public class FXMain extends Application {
 		subStage.close();
 	}
 
-	public void openWindow(IPanel panel){
+	public IPanel openWindow(String fileName){
 
 		Stage newState = new Stage();
 		newState.initOwner(mainStage);
 
+		IPanel controller = null;
+
 		try{
 			FXMLLoader loader = new FXMLLoader();
-			loader.load(getClass().getResource(panel.getFxml()).openStream());
+			loader.load(getClass().getResource(fileName).openStream());
 			newState.setScene(new Scene(loader.getRoot()));
+			controller = loader.getController();
 		} catch(IOException ex){
 			ex.printStackTrace();
 		}
 
 		subStage = newState;
 		newState.showAndWait();
+
+		return controller;
 	}
 }

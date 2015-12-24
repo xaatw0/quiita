@@ -6,10 +6,6 @@ public interface IPanel<T> {
 		OK,Cancel
 	}
 
-	Result getResult();
-
-	String getText();
-
 	String getFxml();
 
 	T getData();

@@ -21,10 +21,6 @@ public class MainWindowController<T> implements Initializable, IPanel<Void>{
 	public void initialize(URL paramURL, ResourceBundle paramResourceBundle) {
 	}
 
-	@Override
-	public Result getResult() {
-		return null;
-	}
 
 	@Override
 	public String getFxml() {
@@ -33,22 +29,17 @@ public class MainWindowController<T> implements Initializable, IPanel<Void>{
 
 	@FXML
 	public void btnOpenPressed(ActionEvent event){
-		IPanel panel = new DatePanelController();
-		FXMain.getInstance().openWindow(panel);
+		IPanel panel = chkDate.selectedProperty().get() ? new DatePanelController(): new TextPanelController();
+		Object result = FXMain.getInstance().openWindow(panel.getFxml()).getData();
 
-		if (panel.getResult() == Result.OK){
-			lblResult.setText(panel.getData().toString());
+		if (result != null){
+			lblResult.setText(result.toString());
 		}
 	}
 
-	@Override
-	public String getText() {
-		return null;
-	}
 
 	@Override
 	public Void getData() {
-		// TODO 自動生成されたメソッド・スタブ
 		return null;
 	}
 }

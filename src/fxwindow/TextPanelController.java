@@ -3,37 +3,40 @@ package fxwindow;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TextField;
 
 public class TextPanelController implements Initializable, IPanel<String>{
 
-	@Override
-	public Result getResult() {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
-	}
+	@FXML private TextField text;
+
+	private String data = null;
 
 	@Override
 	public String getFxml() {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
+		return "TextPanel.fxml";
 	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// TODO 自動生成されたメソッド・スタブ
-
-	}
-
-	@Override
-	public String getText() {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
 	}
 
 	@Override
 	public String getData() {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
+		return data;
+	}
+
+	@FXML
+	public void btnOkPressed(ActionEvent event){
+		data = text.textProperty().get();
+		FXMain.getInstance().backToMainWindow();
+	}
+
+	@FXML
+	public void btnCancelPressed(ActionEvent event){
+		data = null;
+		FXMain.getInstance().backToMainWindow();
 	}
 }

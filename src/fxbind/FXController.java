@@ -4,9 +4,13 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -27,8 +31,12 @@ public class FXController implements Initializable{
 	@FXML Label label;
 	@FXML Label lblCheckbox5;
 
-	@FXML ComboBox<String> cmbBox;
+	@FXML ComboBox<CmbMenu> cmbBox;
 	@FXML Label lblCmbBox;
+	@FXML Label lblCmbBoxSelected;
+
+	private ObservableList<CmbMenu> data;
+	private ObjectProperty<CmbMenu> selectedData;
 
 	BooleanProperty blnBindBidirectional = new SimpleBooleanProperty();
 
@@ -50,7 +58,27 @@ public class FXController implements Initializable{
 
 		checkBox5.selectedProperty().bindBidirectional(blnBindBidirectional);
 		lblCheckbox5.textProperty().bind(blnBindBidirectional.asString());
-		cmbBox.editableProperty().bind(blnBindBidirectional);;
+
+		// コンボボックスのデータ
+		cmbBox.editableProperty().bind(blnBindBidirectional);
+		data = FXCollections.observableArrayList();
+		data.add(new CmbMenu(1,"A"));
+		data.add(new CmbMenu(2,"B"));
+		data.add(new CmbMenu(3,"C"));
+		cmbBox.setItems(data);
+		cmbBox.setConverter(new CmbMenu.CmbMenuStringConverter());
+
+		selectedData = new SimpleObjectProperty<>();
+		selectedData.bind(cmbBox.getSelectionModel().selectedItemProperty());
+		lblCmbBoxSelected.textProperty().bind(selectedData.asString());
+
+		cmbBox.getSelectionModel().selectedItemProperty().addListener((r,o,newValue) -> {
+			if (newValue == null){
+				lblCmbBox.textProperty().set("選択なし");
+			} else {
+				lblCmbBox.textProperty().set(newValue.getTitle());
+			}
+		});
 
 	}
 

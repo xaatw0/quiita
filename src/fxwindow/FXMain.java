@@ -10,6 +10,13 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 
+/**
+ * アプリケーションの開始・終了、ウィンドウの表示や閉じる処理を管理するクラス。
+ *
+ * (参考)
+ * http://www.javafxtutorials.com/tutorials/creating-a-pop-up-window-in-javafx/
+ * http://qiita.com/mix/items/7c797eccad0a5e3a43c3
+ */
 public class FXMain extends Application {
 
 	private Stage mainWindows;

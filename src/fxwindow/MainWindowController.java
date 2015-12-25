@@ -12,25 +12,19 @@ import javafx.scene.control.Label;
 
 public class MainWindowController<T> implements Initializable, IPanel<Void>{
 
+	public static final String FXML_FILE = "MainWindow.fxml";
+
 	@FXML Label lblResult;
 	@FXML CheckBox chkDate;
-
-	Result result;
 
 	@Override
 	public void initialize(URL paramURL, ResourceBundle paramResourceBundle) {
 	}
 
-
-	@Override
-	public String getFxml() {
-		return "MainWindow.fxml";
-	}
-
 	@FXML
 	public void btnOpenPressed(ActionEvent event){
-		IPanel panel = chkDate.selectedProperty().get() ? new DatePanelController(): new TextPanelController();
-		Object result = FXMain.getInstance().openWindow(panel.getFxml()).getData();
+		String fxmlFile = chkDate.selectedProperty().get() ? DatePanelController.FXML_FILE: TextPanelController.FXML_FILE;
+		Object result = FXMain.getInstance().openWindow(fxmlFile).getData();
 
 		if (result != null){
 			lblResult.setText(result.toString());

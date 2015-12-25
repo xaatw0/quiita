@@ -10,14 +10,11 @@ import javafx.scene.control.TextField;
 
 public class TextPanelController implements Initializable, IPanel<String>{
 
+	public static final String FXML_FILE = "TextPanel.fxml";
+
 	@FXML private TextField text;
 
 	private String data = null;
-
-	@Override
-	public String getFxml() {
-		return "TextPanel.fxml";
-	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {

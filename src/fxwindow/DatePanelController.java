@@ -11,17 +11,14 @@ import javafx.scene.control.DatePicker;
 
 public class DatePanelController implements Initializable, IPanel<LocalDate>{
 
+	public final static String FXML_FILE = "DatePanel.fxml";
+
 	@FXML private DatePicker datePicker;
 
 	private LocalDate data;
 
 	@Override
 	public void initialize(URL paramURL, ResourceBundle paramResourceBundle) {
-	}
-
-	@Override
-	public String getFxml() {
-		return "DatePanel.fxml";
 	}
 
 	@FXML

@@ -22,11 +22,10 @@ public class FXMain extends Application {
 	public void start(Stage primaryStage) {
 
 		try {
-
 			mainStage = primaryStage;
 			instance = this;
 
-			changeWindow(new MainWindowController());
+			changeWindow(MainWindowController.FXML_FILE);
 
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -41,11 +40,11 @@ public class FXMain extends Application {
 		return instance;
 	}
 
-	public void changeWindow(IPanel panel){
+	public void changeWindow(String fxmlFile){
 
 		try{
 			FXMLLoader loader = new FXMLLoader();
-			loader.load(getClass().getResource(panel.getFxml()).openStream());
+			loader.load(getClass().getResource(fxmlFile).openStream());
 
 			mainStage.setScene(new Scene(loader.getRoot()));
 			mainStage.show();
@@ -58,7 +57,7 @@ public class FXMain extends Application {
 		subStage.close();
 	}
 
-	public IPanel openWindow(String fileName){
+	public IPanel openWindow(String fxmlFile){
 
 		Stage newState = new Stage();
 		newState.initOwner(mainStage);
@@ -68,7 +67,7 @@ public class FXMain extends Application {
 
 		try{
 			FXMLLoader loader = new FXMLLoader();
-			loader.load(getClass().getResource(fileName).openStream());
+			loader.load(getClass().getResource(fxmlFile).openStream());
 			newState.setScene(new Scene(loader.getRoot()));
 			controller = loader.getController();
 		} catch(IOException ex){

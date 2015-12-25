@@ -329,6 +329,16 @@ public class Javaの正規表現 {
 
 	}
 
+	@Test
+	public void 天気表記(){
+		Pattern ptnWeather = Pattern.compile("[晴曇雨雪](/[晴曇雨雪])?");
+
+		assertThat(ptnWeather.matcher("晴").matches(), is(true));
+		assertThat(ptnWeather.matcher("晴後").matches(), is(false));
+		assertThat(ptnWeather.matcher("晴/雨").matches(), is(true));
+		assertThat(ptnWeather.matcher("晴/雨雨").matches(), is(false));
+		assertThat(ptnWeather.matcher("晴雨").matches(), is(false));
+	}
 
 	@Test
 	public void 日本語テキストへのマッチ(){

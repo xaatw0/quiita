@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="125.0" prefWidth="254.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxwindow.LoginWindowController">
+   <children>
+      <Label layoutX="14.0" layoutY="15.0" text="ログイン名" />
+      <Label layoutX="14.0" layoutY="47.0" text="パスワード" />
+      <TextField fx:id="txtLoginName" layoutX="67.0" layoutY="11.0" />
+      <TextField fx:id="txtPassword" layoutX="67.0" layoutY="43.0" />
+      <Button layoutX="75.0" layoutY="88.0" mnemonicParsing="false" onAction="#btnLoginPressed" text="ログイン" />
+      <Button layoutX="164.0" layoutY="88.0" mnemonicParsing="false" onAction="#btnClosePressed" text="終了" />
+      <Label fx:id="lblMessage" layoutX="13.0" layoutY="73.0" prefHeight="15.0" prefWidth="228.0" text="パスワードを入力してください(入っていればOK)" />
+   </children>
+</Pane>

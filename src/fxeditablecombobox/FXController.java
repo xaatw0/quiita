@@ -4,7 +4,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.Property;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -28,9 +28,7 @@ public class FXController implements Initializable{
 
 	private ObservableList<ComboboxMenu> lstMenu;
 
-	private BooleanProperty isModeAdd = new SimpleBooleanProperty();
-
-	private Property<ComboboxMenu> selectedMenu = new SimpleObjectProperty<>();
+	private ObjectProperty<ComboboxMenu> selectedMenu = new SimpleObjectProperty<>();
 
 	@Override
 	public void initialize(URL paramURL, ResourceBundle paramResourceBundle) {
@@ -39,16 +37,14 @@ public class FXController implements Initializable{
 		lstMenu = FXCollections.observableArrayList();
 		cmbTitle.setPromptText("New Menu");
 		cmbTitle.setItems(lstMenu);
-		//cmbTitle.setEditable(true);
 		cmbTitle.setConverter(new ComboboxMenu.ComboboxMenuConverter());
 		selectedMenu.bind(cmbTitle.getSelectionModel().selectedItemProperty());
 
 		// コンボボックスに選択肢を追加
 		ComboboxMenu menu0 = new ComboboxMenu();
-		menu0.setId(0);
+		menu0.setId(-1);
 		menu0.setTitle("");
 		lstMenu.add(menu0);
-		cmbTitle.getSelectionModel().select(menu0);
 
 		ComboboxMenu menu1 = new ComboboxMenu();
 		menu1.setId(1);
@@ -60,10 +56,9 @@ public class FXController implements Initializable{
 		menu2.setTitle("メニュー2");
 		lstMenu.add(menu2);
 
-		cmbTitle.editableProperty().bindBidirectional(isModeAdd);
-		isModeAdd.bind(selectedMenu.getValue().idProperty().isEqualTo(-1));
-
-		lblMessage.textProperty().bind(selectedMenu.getValue().titleProperty().concat(" was selected"));
+		BooleanProperty blnEdiable = new SimpleBooleanProperty(true);
+		blnEdiable.bind(cmbTitle.getSelectionModel().selectedItemProperty().isEqualTo(menu0));
+		cmbTitle.editableProperty().bind(blnEdiable);
 	}
 
 

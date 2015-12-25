@@ -12,9 +12,9 @@ import javafx.stage.Stage;
 
 public class FXMain extends Application {
 
-	private Stage mainStage;
+	private Stage mainWindows;
 
-	private Stage subStage;
+	private Stage subPanel;
 
 	private static FXMain instance;
 
@@ -22,7 +22,7 @@ public class FXMain extends Application {
 	public void start(Stage primaryStage) {
 
 		try {
-			mainStage = primaryStage;
+			mainWindows = primaryStage;
 			instance = this;
 
 			changeWindow(LoginWindowController.FXML_FILE);
@@ -40,27 +40,40 @@ public class FXMain extends Application {
 		return instance;
 	}
 
+	/**
+	 * メインウィンドウを切り替える。ログインウィンドウとメインウィンドウの移動に使用している。
+	 * @param fxmlFile
+	 */
 	public void changeWindow(String fxmlFile){
 
 		try{
 			FXMLLoader loader = new FXMLLoader();
 			loader.load(getClass().getResource(fxmlFile).openStream());
 
-			mainStage.setScene(new Scene(loader.getRoot()));
-			mainStage.show();
+			mainWindows.setScene(new Scene(loader.getRoot()));
+			mainWindows.show();
 		} catch(IOException ex){
 			ex.printStackTrace();
 		}
 	}
 
+	/**
+	 * 入力用に表示したパネルを閉じる。
+	 */
 	public void backToMainWindow(){
-		subStage.close();
+		subPanel.close();
 	}
 
-	public IPanel<?> openWindow(String fxmlFile){
+	/**
+	 * 入力用のパネルを表示する。入力が完了するまでメインウィンドウを選択できない(モーダル)。<br/>
+	 * 読み込んだウィンドウのコントロールを返す。
+	 * @param fxmlFile
+	 * @return
+	 */
+	public IPanel<?> openPanel(String fxmlFile){
 
 		Stage newStage = new Stage();
-		newStage.initOwner(mainStage);
+		newStage.initOwner(mainWindows);
 		newStage.initModality(Modality.APPLICATION_MODAL);
 
 		IPanel<?> controller = null;
@@ -74,7 +87,9 @@ public class FXMain extends Application {
 			ex.printStackTrace();
 		}
 
-		subStage = newStage;
+		subPanel = newStage;
+
+		// データ入力が完了するまで待機する
 		newStage.showAndWait();
 
 		return controller;

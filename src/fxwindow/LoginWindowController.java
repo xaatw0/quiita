@@ -35,7 +35,7 @@ public class LoginWindowController implements Initializable{
 	@FXML
 	public void btnLoginPressed(ActionEvent event){
 		if (login(loginName.get(), password.get()) ){
-
+			FXMain.getInstance().changeWindow(MainWindowController.FXML_FILE);
 		} else {
 			message.set("ログインIDかパスワードが違います");
 		}

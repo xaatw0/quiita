@@ -26,11 +26,16 @@ public class MainWindowController implements Initializable{
 
 		// チェックボックスに、チェックがあれば日付、なければテキストを入力するダイアログを表示する
 		String fxmlFile = chkDate.selectedProperty().get() ? DatePanelController.FXML_FILE: TextPanelController.FXML_FILE;
-		IPanel<?> panel = FXMain.getInstance().openWindow(fxmlFile);
+		IPanel<?> panel = FXMain.getInstance().openPanel(fxmlFile);
 
 		Object result = panel.getData();
 		if (result != null){
 			lblResult.setText(result.toString());
 		}
+	}
+
+	@FXML
+	public void btnLogoutPressed(ActionEvent event){
+		FXMain.getInstance().changeWindow(LoginWindowController.FXML_FILE);
 	}
 }

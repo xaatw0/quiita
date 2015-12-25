@@ -10,7 +10,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 
 
-public class MainWindowController<T> implements Initializable, IPanel<Void>{
+public class MainWindowController implements Initializable{
 
 	public static final String FXML_FILE = "MainWindow.fxml";
 
@@ -23,17 +23,14 @@ public class MainWindowController<T> implements Initializable, IPanel<Void>{
 
 	@FXML
 	public void btnOpenPressed(ActionEvent event){
-		String fxmlFile = chkDate.selectedProperty().get() ? DatePanelController.FXML_FILE: TextPanelController.FXML_FILE;
-		Object result = FXMain.getInstance().openWindow(fxmlFile).getData();
 
+		// チェックボックスに、チェックがあれば日付、なければテキストを入力するダイアログを表示する
+		String fxmlFile = chkDate.selectedProperty().get() ? DatePanelController.FXML_FILE: TextPanelController.FXML_FILE;
+		IPanel<?> panel = FXMain.getInstance().openWindow(fxmlFile);
+
+		Object result = panel.getData();
 		if (result != null){
 			lblResult.setText(result.toString());
 		}
-	}
-
-
-	@Override
-	public Void getData() {
-		return null;
 	}
 }

@@ -14,7 +14,7 @@ public class TextPanelController implements Initializable, IPanel<String>{
 
 	@FXML private TextField text;
 
-	private String data = null;
+	private boolean isOK = false;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -22,18 +22,17 @@ public class TextPanelController implements Initializable, IPanel<String>{
 
 	@Override
 	public String getData() {
-		return data;
+		return  isOK ? text.textProperty().get() : null;
 	}
 
 	@FXML
 	public void btnOkPressed(ActionEvent event){
-		data = text.textProperty().get();
+		isOK = true;
 		FXMain.getInstance().backToMainWindow();
 	}
 
 	@FXML
 	public void btnCancelPressed(ActionEvent event){
-		data = null;
 		FXMain.getInstance().backToMainWindow();
 	}
 }

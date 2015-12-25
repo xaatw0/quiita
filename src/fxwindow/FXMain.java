@@ -25,7 +25,7 @@ public class FXMain extends Application {
 			mainStage = primaryStage;
 			instance = this;
 
-			changeWindow(MainWindowController.FXML_FILE);
+			changeWindow(LoginWindowController.FXML_FILE);
 
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -57,25 +57,25 @@ public class FXMain extends Application {
 		subStage.close();
 	}
 
-	public IPanel openWindow(String fxmlFile){
+	public IPanel<?> openWindow(String fxmlFile){
 
-		Stage newState = new Stage();
-		newState.initOwner(mainStage);
-		newState.initModality(Modality.APPLICATION_MODAL);
+		Stage newStage = new Stage();
+		newStage.initOwner(mainStage);
+		newStage.initModality(Modality.APPLICATION_MODAL);
 
-		IPanel controller = null;
+		IPanel<?> controller = null;
 
 		try{
 			FXMLLoader loader = new FXMLLoader();
 			loader.load(getClass().getResource(fxmlFile).openStream());
-			newState.setScene(new Scene(loader.getRoot()));
+			newStage.setScene(new Scene(loader.getRoot()));
 			controller = loader.getController();
 		} catch(IOException ex){
 			ex.printStackTrace();
 		}
 
-		subStage = newState;
-		newState.showAndWait();
+		subStage = newStage;
+		newStage.showAndWait();
 
 		return controller;
 	}

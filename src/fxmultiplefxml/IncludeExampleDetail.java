@@ -1,18 +1,48 @@
 package fxmultiplefxml;
 
-import java.net.URL;
-import java.util.ResourceBundle;
+import javafx.beans.value.ChangeListener;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 
-import javafx.fxml.Initializable;
+public class IncludeExampleDetail{
 
-public class IncludeExampleDetail implements Initializable{
+	@FXML private Label category;
 
-	@Override
-	public void initialize(URL paramURL, ResourceBundle paramResourceBundle) {
-	}
+	@FXML private Label name;
+
+	@FXML private TextArea description;
+
+	private Product product;
+	private ChangeListener<String> listner;
+
 
 	public void setProduct(Product product) {
-		// TODO 自動生成されたメソッド・スタブ
+		if(this.product == null){
+			unhookListner();
+		}
+		this.product = product;
+		hookTo(product);
+	}
 
+	private void unhookListner(){
+		description.textProperty().removeListener(listner);
+	}
+
+	private void hookTo(Product product){
+		if (product == null){
+			category.setText("");
+			name.setText("");
+			description.setText("");
+			listner = null;
+		} else {
+			category.setText(product.getCategory());
+			name.setText(product.getCategory());
+			description.setText(product.getDescritpion());
+		}
+
+		listner = (observable, oldValue,newValue)
+				-> product.setDescritpion(newValue);
+				description.textProperty().addListener(listner);
 	}
 }

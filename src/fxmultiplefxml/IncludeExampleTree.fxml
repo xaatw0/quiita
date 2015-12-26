@@ -6,8 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-
-<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmultiplefxml.FXMain">
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxmultiplefxml.IncludeExampleTree">
    <top>
       <Label text="Product Details" BorderPane.alignment="CENTER">
          <font>
@@ -23,13 +22,16 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <TreeTableView prefHeight="200.0" prefWidth="200.0">
+            <TreeTableView fx:id="treeTableView" prefHeight="200.0" prefWidth="200.0">
               <columns>
-                <TreeTableColumn prefWidth="75.0" text="C1" />
-                <TreeTableColumn prefWidth="75.0" text="C2" />
+                <TreeTableColumn fx:id="category" editable="false" prefWidth="125.0" text="C1" />
+                <TreeTableColumn fx:id="name" editable="false" prefWidth="75.0" text="C2" />
               </columns>
             </TreeTableView>
          </children>
       </VBox>
    </left>
+   <center>
+   		<fx:include fx:id="details" source="IncludeExampleDetail.fxml"/>
+   </center>
 </BorderPane>

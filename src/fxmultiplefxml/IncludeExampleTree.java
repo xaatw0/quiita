@@ -21,7 +21,8 @@ public class IncludeExampleTree implements Initializable{
 
 	@FXML private VBox details;
 
-	@FXML private IncludeExampleDetail detailController;
+	// コントロールのIDは「FXMLのID + Controller」
+	@FXML private IncludeExampleDetail detailsController;
 
 	@Override
 	public void initialize(URL paramURL, ResourceBundle paramResourceBundle) {
@@ -49,7 +50,7 @@ public class IncludeExampleTree implements Initializable{
 		}
 
 		category.setCellValueFactory(p ->
-			new ReadOnlyStringWrapper(p.getValue().getValue().getName())
+			new ReadOnlyStringWrapper(p.getValue().getValue().getCategory())
 		);
 		name.setCellValueFactory(p ->
 			new ReadOnlyStringWrapper(p.getValue().getValue().getName())
@@ -63,7 +64,8 @@ public class IncludeExampleTree implements Initializable{
 					if (newValue != null){
 						product = newValue.getValue();
 					}
-					detailController.setProduct(product);
+
+					detailsController.setProduct(product);
 				});
 	}
 }

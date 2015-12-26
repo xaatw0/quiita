@@ -10,26 +10,18 @@ import javafx.stage.Stage;
 
 public class FXMain extends Application {
 
-	private final String FXML_NAME = "IncludeExampleTree.fxml";
-
 	@Override
-	public void start(Stage primaryStage) {
-		try {
-
-			FXMLLoader loader = new FXMLLoader();
-			loader.load(getClass().getResource(FXML_NAME).openStream());
-			BorderPane root = loader.getRoot();
-			Scene scene = new Scene(root);
-
-			primaryStage.setScene(scene);
-			primaryStage.show();
-
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+	public void start(Stage primaryStage) throws Exception {
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(this.getClass().getResource("IncludeExampleTree.fxml"));
+		final BorderPane borderPane = loader.load();
+		Scene scen = new Scene(borderPane,600,400);
+		primaryStage.setTitle("Include Example");
+		primaryStage.setScene(scen);
+		primaryStage.show();
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args){
 		launch(args);
 	}
 }

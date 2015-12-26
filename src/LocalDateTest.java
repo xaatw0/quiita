@@ -166,4 +166,19 @@ public class LocalDateTest {
 		LocalDate date = LocalDate.of(2015, 8, 18);
 		assertThat(date.format(formatter), is("2015/08/18"));
 	}
+
+	@Test
+	public void 週の初日(){
+
+		LocalDate date = LocalDate.of(2015, 9, 15);
+
+		LocalDate firstDayOfWeek = date.minusDays(date.getDayOfWeek().getValue());
+
+		assertThat(firstDayOfWeek.getYear(), is(2015));
+		assertThat(firstDayOfWeek.getMonthValue(), is(9));
+		assertThat(firstDayOfWeek.getDayOfMonth(), is(13));
+
+
+
+	}
 }

@@ -16,9 +16,8 @@ public class IncludeExampleDetail{
 	private Product product;
 	private ChangeListener<String> listner;
 
-
 	public void setProduct(Product product) {
-		if(this.product == null){
+		if(this.product != null){
 			unhookListner();
 		}
 		this.product = product;
@@ -26,6 +25,7 @@ public class IncludeExampleDetail{
 	}
 
 	private void unhookListner(){
+
 		description.textProperty().removeListener(listner);
 	}
 
@@ -37,7 +37,7 @@ public class IncludeExampleDetail{
 			listner = null;
 		} else {
 			category.setText(product.getCategory());
-			name.setText(product.getCategory());
+			name.setText(product.getName());
 			description.setText(product.getDescritpion());
 		}
 

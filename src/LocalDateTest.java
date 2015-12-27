@@ -177,8 +177,5 @@ public class LocalDateTest {
 		assertThat(firstDayOfWeek.getYear(), is(2015));
 		assertThat(firstDayOfWeek.getMonthValue(), is(9));
 		assertThat(firstDayOfWeek.getDayOfMonth(), is(13));
-
-
-
 	}
 }

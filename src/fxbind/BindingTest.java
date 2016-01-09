@@ -1,7 +1,7 @@
 package fxbind;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.*;
+import static org.junit.Assert.*;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.NumberBinding;
 import javafx.beans.binding.When;
@@ -57,6 +57,39 @@ public class BindingTest {
 	       assertThat(num2.getValue(), is(1));
 
 	       num1.setValue(2);
+	       assertThat(num1.getValue(), is(2));
+	       assertThat(num2.getValue(), is(2));
+	}
+
+	@Test
+	public void bind(){
+	       IntegerProperty num1 = new SimpleIntegerProperty(1);
+	       IntegerProperty num2 = new SimpleIntegerProperty(2);
+	       num2.bind(num1);
+
+	       num1.set(1);
+
+	       try{
+	    	   // num2はnum1にバインドされているため、num2に設定すると例外が発生する
+	    	   // java.lang.RuntimeException: A bound value cannot be set.
+
+	    	   num2.set(2);
+	    	   fail();
+	       }catch(RuntimeException e){}
+	}
+
+	@Test
+	public void bindBidirectional(){
+	       IntegerProperty num1 = new SimpleIntegerProperty(1);
+	       IntegerProperty num2 = new SimpleIntegerProperty(2);
+	       num2.bindBidirectional(num1);
+
+	       // bindBidirectionalでバインドすると、num1,num2どちらにも設定できる
+	       num1.set(1);
+	       assertThat(num1.getValue(), is(1));
+	       assertThat(num2.getValue(), is(1));
+
+	       num2.set(2);
 	       assertThat(num1.getValue(), is(2));
 	       assertThat(num2.getValue(), is(2));
 	}
@@ -218,9 +251,12 @@ public class BindingTest {
 	@Test
 	public void BooleanBindWhenThenOtherwise(){
 
+		// 分子が4，分母が2
 		IntegerProperty numerator = new SimpleIntegerProperty(4);
 		IntegerProperty denominato = new SimpleIntegerProperty(2);
 
+		// 分母が0でないなら、分子を分母で割った値、
+		// 上記以外の場合、0を返す。
 		NumberBinding value =
 			new When(denominato.isNotEqualTo(0))
 			.then(numerator.divide(denominato))

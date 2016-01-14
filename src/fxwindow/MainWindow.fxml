@@ -6,7 +6,7 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="126.0" prefWidth="245.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxwindow.MainWindowController">
    <children>
-      <Button layoutX="134.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnOpenPressed" text="ダイアログ開く" />
+      <Button layoutX="134.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnOpenPressed" text="パネル開く" />
       <CheckBox fx:id="chkDate" layoutX="29.0" layoutY="17.0" mnemonicParsing="false" text="日付を入力" />
       <Label layoutX="29.0" layoutY="47.0" prefHeight="15.0" prefWidth="132.0" text="入力された情報" />
       <Label fx:id="lblResult" layoutX="29.0" layoutY="70.0" prefHeight="23.0" prefWidth="188.0" text="[値]" />

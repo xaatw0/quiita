@@ -15,7 +15,7 @@ public class DatePanelController implements Initializable, IPanel<LocalDate>{
 
 	@FXML private DatePicker datePicker;
 
-	private LocalDate data;
+	private LocalDate selectedDate;
 
 	@Override
 	public void initialize(URL paramURL, ResourceBundle paramResourceBundle) {
@@ -23,12 +23,23 @@ public class DatePanelController implements Initializable, IPanel<LocalDate>{
 
 	@FXML
 	public void btnOKPressed(ActionEvent event){
-		data = datePicker.getValue();
+		selectedDate = datePicker.getValue();
 		FXMain.getInstance().backToMainWindow();
 	}
 
 	@Override
 	public LocalDate getData() {
-		return data;
+		return selectedDate;
 	}
+
+	@Override
+	public void setData(LocalDate date) {
+		datePicker.setValue(date);
+	}
+
+	@Override
+	public boolean isAvailableData(Object obj) {
+		return obj instanceof LocalDate;
+	}
+
 }

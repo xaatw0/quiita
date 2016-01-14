@@ -25,6 +25,11 @@ public class TextPanelController implements Initializable, IPanel<String>{
 		return  isOK ? text.textProperty().get() : null;
 	}
 
+	@Override
+	public void setData(String data){
+		text.textProperty().set(data);
+	}
+
 	@FXML
 	public void btnOkPressed(ActionEvent event){
 		isOK = true;
@@ -34,5 +39,11 @@ public class TextPanelController implements Initializable, IPanel<String>{
 	@FXML
 	public void btnCancelPressed(ActionEvent event){
 		FXMain.getInstance().backToMainWindow();
+	}
+
+	@Override
+	public boolean isAvailableData(Object obj) {
+
+		return obj instanceof String;
 	}
 }

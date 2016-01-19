@@ -112,8 +112,7 @@ public class FXMain extends Application {
 		controller = loader.getController();
 
 		// 以前データを選択して、そのデータの型がパネルの型と一致している場合、初期値に設定する
-		// 「data instanceof T」とできたら、IPanel.isAvailableDataがなくなるのに。
-		if (data != null && controller.isAvailableData(data)){
+		if (data != null){
 			controller.setData(data);
 		}
 

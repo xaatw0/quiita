@@ -40,10 +40,4 @@ public class TextPanelController implements Initializable, IPanel<String>{
 	public void btnCancelPressed(ActionEvent event){
 		FXMain.getInstance().backToMainWindow();
 	}
-
-	@Override
-	public boolean isAvailableData(Object obj) {
-
-		return obj instanceof String;
-	}
 }

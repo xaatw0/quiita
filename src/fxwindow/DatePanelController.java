@@ -36,10 +36,4 @@ public class DatePanelController implements Initializable, IPanel<LocalDate>{
 	public void setData(LocalDate date) {
 		datePicker.setValue(date);
 	}
-
-	@Override
-	public boolean isAvailableData(Object obj) {
-		return obj instanceof LocalDate;
-	}
-
 }

@@ -17,11 +17,4 @@ public interface IPanel<T> {
 	 * @param data
 	 */
 	void setData(T data);
-
-	/**
-	 * 引数のデータが本派ネルで取り扱うデータの型か調べる
-	 * @param obj データ
-	 * @return true:型が正しい false:型が正しくない
-	 */
-	boolean isAvailableData(Object obj);
 }

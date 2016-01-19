@@ -1,6 +1,7 @@
 package fxwindow;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
@@ -25,23 +26,36 @@ public class MainWindowController implements Initializable{
 	}
 
 	/**
-	 * 「パネル開く」ボタン押下時のイベント。チェックがあればDatePanel,なければTextPenelを開く。
+	 * 「テキスト」ボタン押下時のイベント。TextPenelを開く。
 	 * @param event
 	 */
 	@FXML
-	public void btnOpenPressed(ActionEvent event){
+	public void btnTextPressed(ActionEvent event){
 
-		boolean isDateSelected = chkDate.selectedProperty().get();
-
-		// チェックボックスに、チェックがあれば日付、なければテキストを入力するパネルを表示する
-		String fxmlFile = isDateSelected ? DatePanelController.FXML_FILE: TextPanelController.FXML_FILE;
-		IPanel<?> panel = FXMain.getInstance().openPanel(fxmlFile, data);
+		IPanel<Object> panel = FXMain.getInstance().openPanel(TextPanelController.FXML_FILE, convert(data, String.class));
 
 		// パネルでデータが入力されていれば、入力結果を表示する
 		Object result = panel.getData();
 		if (result != null){
 			data = result;
-			lblResult.setText(data.toString());
+			lblResult.textProperty().set(data.toString());
+		}
+	}
+
+	/**
+	 * 「日付」ボタン押下時のイベント。DatePanelを開く。
+	 * @param event
+	 */
+	@FXML
+	public void btnDatePressed(ActionEvent event){
+
+		IPanel<Object> panel = FXMain.getInstance().openPanel(DatePanelController.FXML_FILE, convert(data, LocalDate.class));
+
+		// パネルでデータが入力されていれば、入力結果を表示する
+		Object result = panel.getData();
+		if (result != null){
+			data = result;
+			lblResult.textProperty().set(data.toString());
 		}
 	}
 
@@ -52,5 +66,16 @@ public class MainWindowController implements Initializable{
 	@FXML
 	public void btnLogoutPressed(ActionEvent event){
 		FXMain.getInstance().changeMainWindow(LoginWindowController.FXML_FILE);
+	}
+
+	/**
+	 * 既存データが開くパネルに対応したデータであれば値を、対応していないデータであればnullを返す
+	 * @param obj データ
+	 * @param clazz パネルに対応したクラス型
+	 * @return データ、もしくは、null
+	 */
+	private Object convert(Object obj, Class clazz){
+
+		return clazz.isInstance(obj) ? obj:null;
 	}
 }

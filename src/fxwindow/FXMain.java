@@ -88,9 +88,9 @@ public class FXMain extends Application {
 	/**
 	 * 入力用のパネルを表示する。入力が完了するまでメインウィンドウを選択できない(モーダル)。<br/>
 	 * 読み込んだウィンドウのコントロールを返す。
-	 * @param <T> 表示するパネルが取り扱うデータの型。取り扱っていないデータでも、これが呼ばれる。
+	 * @param <T> 表示するパネルが取り扱うデータの型。
 	 * @param fxmlFile 表示するパネルのFXMLファイル
-	 * @param data 初期化に使用するデータ(T型でないデータでは初期化しない)
+	 * @param data 初期化に使用するデータ
 	 * @return 表示するパネルのコントロール
 	 */
 	public <T> IPanel<T> openPanel(String fxmlFile, T data){
@@ -112,8 +112,7 @@ public class FXMain extends Application {
 		controller = loader.getController();
 
 		// 以前データを選択して、そのデータの型がパネルの型と一致している場合、初期値に設定する
-		// 「data instanceof T」とできたら、IPanel.isAvailableDataがなくなるのに。
-		if (data != null && controller.isAvailableData(data)){
+		if (data != null){
 			controller.setData(data);
 		}
 

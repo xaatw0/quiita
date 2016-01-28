@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 
 import org.junit.Test;
 
@@ -178,4 +179,69 @@ public class LocalDateTest {
 		assertThat(firstDayOfWeek.getMonthValue(), is(9));
 		assertThat(firstDayOfWeek.getDayOfMonth(), is(13));
 	}
+
+	@Test
+	public void 月初月末年始年末の日付(){
+		LocalDate today = LocalDate.of(2016, 1, 28);
+
+		// 月初
+		assertThat(today.with(TemporalAdjusters.firstDayOfMonth()), is(LocalDate.of(2016, 1, 1)));
+
+		// 月末
+		assertThat(today.with(TemporalAdjusters.lastDayOfMonth()), is(LocalDate.of(2016, 1, 31)));
+
+		// 来月の月初
+		assertThat(today.with(TemporalAdjusters.firstDayOfNextMonth()), is(LocalDate.of(2016, 2, 1)));
+
+		// 今年の初日
+		assertThat(today.with(TemporalAdjusters.firstDayOfYear()), is(LocalDate.of(2016, 1, 1)));
+
+		// 今年の最終日
+		assertThat(today.with(TemporalAdjusters.lastDayOfYear()), is(LocalDate.of(2016, 12, 31)));
+
+		// 来年の初日
+		assertThat(today.with(TemporalAdjusters.firstDayOfNextYear()), is(LocalDate.of(2017, 1, 1)));
+
+		// 標準ではないもの
+		// 来月の月末
+		// 来年の最終日
+		// 昨年の初日・最終日
+	}
+
+	@Test
+	public void 曜日(){
+
+		// 今日 平成28年1月28日(木)
+		LocalDate today = LocalDate.of(2016, 1, 28);
+
+		// 月の最初の月曜日
+		assertThat(today.with(TemporalAdjusters.firstInMonth(DayOfWeek.MONDAY)), is(LocalDate.of(2016, 1, 4)));
+
+		// 月の最後の月曜日
+		assertThat(today.with(TemporalAdjusters.lastInMonth(DayOfWeek.MONDAY)), is(LocalDate.of(2016, 1, 25)));
+
+		// 次の木曜日
+		assertThat(today.with(TemporalAdjusters.next(DayOfWeek.THURSDAY)), is(LocalDate.of(2016, 2, 4)));
+
+		// 前の木曜日
+		assertThat(today.with(TemporalAdjusters.previous(DayOfWeek.THURSDAY)), is(LocalDate.of(2016, 1, 21)));
+
+		// 次の木曜日、今日も含む
+		assertThat(today.with(TemporalAdjusters.nextOrSame(DayOfWeek.THURSDAY)), is(LocalDate.of(2016, 1, 28)));
+
+		// 前の木曜日、今日も含む
+		assertThat(today.with(TemporalAdjusters.previousOrSame(DayOfWeek.THURSDAY)), is(LocalDate.of(2016, 1, 28)));
+
+		// 第1木曜日
+		assertThat(today.with(TemporalAdjusters.dayOfWeekInMonth(1,DayOfWeek.THURSDAY)), is(LocalDate.of(2016, 1, 7)));
+
+		// 第5木曜日→月にない場合、次の月の日を返す
+		assertThat(today.with(TemporalAdjusters.dayOfWeekInMonth(5,DayOfWeek.THURSDAY)), is(LocalDate.of(2016, 2, 4)));
+
+		// 最終木曜日
+		assertThat(today.with(TemporalAdjusters.dayOfWeekInMonth(-1,DayOfWeek.THURSDAY)), is(LocalDate.of(2016, 1, 28)));
+
+		// 最後から5番目の木曜日→月にない場合、前の月の日を返す
+		assertThat(today.with(TemporalAdjusters.dayOfWeekInMonth(-5,DayOfWeek.THURSDAY)), is(LocalDate.of(2015, 12, 31)));
+}
 }

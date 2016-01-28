@@ -15,5 +15,6 @@
 	<classpathentry kind="lib" path="C:/pleiades/lib/logback-classic-1.1.3.jar"/>
 	<classpathentry kind="lib" path="C:/pleiades/lib/logback-core-1.1.3.jar"/>
 	<classpathentry kind="lib" path="C:/pleiades/lib/cron4j-2.2.5.jar"/>
+	<classpathentry kind="lib" path="C:/pleiades/lib/postgresql-9.1-901.jdbc4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

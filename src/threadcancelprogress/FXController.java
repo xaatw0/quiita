@@ -14,6 +14,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 
+/**
+ * http://www.torutk.com/projects/swe/wiki/JavaFXとマルチスレッド
+ * https://docs.oracle.com/javase/jp/8/javafx/api/javafx/application/Platform.html#runLater-java.lang.Runnable-
+ *https://docs.oracle.com/javase/jp/8/javafx/interoperability-tutorial/concurrency.htm
+ */
 public class FXController implements Initializable{
 
 	@FXML

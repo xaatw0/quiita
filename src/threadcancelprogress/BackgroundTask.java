@@ -10,6 +10,7 @@ import java.util.concurrent.TimeoutException;
 
 import javafx.application.Platform;
 
+
 public abstract class BackgroundTask<V> implements Runnable, Future<V> {
 
 	private final FutureTask<V> computation = new Computation();

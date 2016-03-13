@@ -5,9 +5,8 @@ import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -39,13 +38,12 @@ public class FXController implements Initializable{
 	@FXML
 	public void execute(ActionEvent e){
 
-		final ChangeListener<ActionEvent> listener = new ChangeListener<ActionEvent> () {
+		final EventHandler<ActionEvent> listener = new EventHandler<ActionEvent>() {
 
 			private BackgroundTask<Void> task;
 
 			@Override
-			public void changed(ObservableValue<? extends ActionEvent> arg0,
-					ActionEvent arg1, ActionEvent arg2) {
+			public void handle(ActionEvent event) {
 				if (task != null){
 					task.cancel(true);
 				}
@@ -66,15 +64,13 @@ public class FXController implements Initializable{
 
 			@Override
 			public void onCompletion(Void result, Throwable exception, boolean canceled){
-				btnCancel.onActionProperty().removeListener(listener);
+				btnCancel.setOnAction(null);
 				lblStatus.setText(canceled ? "キャンセルされた":"完了した");
 			}
 		};
 
-		btnCancel.onActionProperty().addListener((o,e1,e2)->{
 
-		});
-		btnCancel.onActionProperty().addListener(listener);
+		btnCancel.setOnAction(listener);
 		backgroundExec.execute(task);
 	}
 }

@@ -9,6 +9,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 
 
 public abstract class BackgroundTask<V> implements Runnable, Future<V> {
@@ -117,5 +119,15 @@ public abstract class BackgroundTask<V> implements Runnable, Future<V> {
 			throws InterruptedException, ExecutionException,
 			TimeoutException {
 		return computation.get(timeout, unit);
+	}
+
+	public EventHandler<ActionEvent> getCancelEvent(){
+
+		 return new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					BackgroundTask.this.cancel(true);
+				}
+		 };
 	}
 }

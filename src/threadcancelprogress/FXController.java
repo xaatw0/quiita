@@ -12,7 +12,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -40,23 +39,29 @@ public class FXController implements Initializable{
 
 	private ExecutorService backgroundExec = Executors.newCachedThreadPool();
 
+	/**
+	 * アプリケーションの実行状態を表す
+	 */
 	private enum ExecuteStatus{
-		 BEFORE_EXECUTE
-		,EXECUTING
-		,CANCELED
-		,DONE
+		 /** 実行前*/BEFORE_EXECUTE
+		,/** 実行中*/EXECUTING
+		,/** キャンセル*/CANCELED
+		,/** 完了*/DONE
 	}
 
+	/** アプリケーションの実行状態*/
+	private ObjectProperty<ExecuteStatus> status = new SimpleObjectProperty<>();
+
+	/** ラベルのメッセージ*/
 	private StringProperty messageProperty = new SimpleStringProperty();
 
-	private ObjectProperty<ExecuteStatus> status =
-			new SimpleObjectProperty<>();
-
+	/** 実行・キャンセルボタンの状態(最初は実行ボタンのみが有効、実行後キャンセルボタンのみ有効になる)*/
 	private BooleanProperty isBtnExecuteDisabled = new SimpleBooleanProperty(false);
 
 	@Override
 	public void initialize(URL paramURL, ResourceBundle paramResourceBundle) {
 
+		// 状態が変化すると、ラベルが変更になる
 		status.addListener((obs,oldValue,newValue) ->{
 			if (newValue == ExecuteStatus.EXECUTING){
 				messageProperty.set("実施中");
@@ -69,9 +74,11 @@ public class FXController implements Initializable{
 			}
 		});
 
+		// ラベルの内容はメッセージにバインドして、状態実行前にする
 		lblStatus.textProperty().bind(messageProperty);
 		status.set(ExecuteStatus.BEFORE_EXECUTE);
 
+		// 実行ボタンとキャンセルボタンの使用可否を逆の状態にする
 		btnExecute.disableProperty().bind(isBtnExecuteDisabled);
 		btnCancel.disableProperty().bind(isBtnExecuteDisabled.not());
 	}
@@ -79,21 +86,20 @@ public class FXController implements Initializable{
 	@FXML
 	public void execute(ActionEvent e){
 
-		final BackgroundTask<Void> backgroundTask = new BackgroundTask<Void>() {
+		BackgroundTask<Void> task = new BackgroundTask<Void>() {
 
 			@Override
 			protected Void compute() {
 
 				int count = 0;
 
-				while ( ! isCancelled()){
+				while (! isCancelled()){
 
 					setProgress(count, 10);
 
 					if (10 < count){
 						break;
 					}
-
 
 					try {
 						Thread.sleep(1000);
@@ -109,6 +115,7 @@ public class FXController implements Initializable{
 				isBtnExecuteDisabled.set(true);
 				progressBar.setProgress(0);
 				status.set(ExecuteStatus.EXECUTING);
+				btnCancel.setOnAction(getCancelEvent());
 			}
 
 			@Override
@@ -124,17 +131,6 @@ public class FXController implements Initializable{
 			}
 		};
 
-		final EventHandler<ActionEvent> cancelHander = new EventHandler<ActionEvent>() {
-
-			private BackgroundTask<Void> task = backgroundTask;
-
-			@Override
-			public void handle(ActionEvent event) {
-				task.cancel(true);
-			}
-		};
-
-		btnCancel.setOnAction(cancelHander);
-		backgroundExec.execute(backgroundTask);
+		backgroundExec.execute(task);
 	}
 }

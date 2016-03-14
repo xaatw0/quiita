@@ -21,7 +21,7 @@ public abstract class BackgroundTask<V> implements Runnable, Future<V> {
 			super(new Callable<V>() {
 				@Override
 				public V call() throws Exception {
-
+					BackgroundTask.this.start();
 					return BackgroundTask.this.compute();
 				}
 			});
@@ -56,8 +56,11 @@ public abstract class BackgroundTask<V> implements Runnable, Future<V> {
 
 	@Override
 	public void run() {
-		// TODO 自動生成されたメソッド・スタブ
+		computation.run();
+	}
 
+	protected void start(){
+		Platform.runLater(()-> onStart());;
 	}
 
 	/**
@@ -67,20 +70,19 @@ public abstract class BackgroundTask<V> implements Runnable, Future<V> {
 	 */
 	protected void setProgress(final int current, final int max){
 
-		// GuiExecutor.instance().execute(new Runnable(){
-		Platform.runLater(new Runnable() {
-			@Override
-			public void run() {
-				onProgress(current, max);
-			}
-		});
+		Platform.runLater(() -> onProgress(current, max));
 	}
+
+
 
 	// バックグラウンドスレッドで呼ばれる
 	protected abstract V compute();
 
 	// イベントスレッドスレッドで呼ばれる
 	protected void onCompletion(V result, Throwable exception, boolean canceled){}
+
+
+	protected void onStart(){}
 
 	/**
 	 * setProgressから起動され、イベントスレッドで動き、ユーザインターフェースのビジュアル的な進捗状況報告を更新する

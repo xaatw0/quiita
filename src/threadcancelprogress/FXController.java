@@ -5,6 +5,12 @@ import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -21,6 +27,9 @@ import javafx.scene.control.ProgressBar;
 public class FXController implements Initializable{
 
 	@FXML
+	private Button btnExecute;
+
+	@FXML
 	private Button btnCancel;
 
 	@FXML
@@ -31,46 +40,101 @@ public class FXController implements Initializable{
 
 	private ExecutorService backgroundExec = Executors.newCachedThreadPool();
 
+	private enum ExecuteStatus{
+		 BEFORE_EXECUTE
+		,EXECUTING
+		,CANCELED
+		,DONE
+	}
+
+	private StringProperty messageProperty = new SimpleStringProperty();
+
+	private ObjectProperty<ExecuteStatus> status =
+			new SimpleObjectProperty<>();
+
+	private BooleanProperty isBtnExecuteDisabled = new SimpleBooleanProperty(false);
+
 	@Override
 	public void initialize(URL paramURL, ResourceBundle paramResourceBundle) {
+
+		status.addListener((obs,oldValue,newValue) ->{
+			if (newValue == ExecuteStatus.EXECUTING){
+				messageProperty.set("実施中");
+			} else if (newValue == ExecuteStatus.CANCELED){
+				messageProperty.set("キャンセルされました");
+			} else if (newValue == ExecuteStatus.DONE){
+				messageProperty.set("完了しました");
+			} else {
+				messageProperty.set("実施前");
+			}
+		});
+
+		lblStatus.textProperty().bind(messageProperty);
+		status.set(ExecuteStatus.BEFORE_EXECUTE);
+
+		btnExecute.disableProperty().bind(isBtnExecuteDisabled);
+		btnCancel.disableProperty().bind(isBtnExecuteDisabled.not());
 	}
 
 	@FXML
 	public void execute(ActionEvent e){
 
-		final EventHandler<ActionEvent> listener = new EventHandler<ActionEvent>() {
-
-			private BackgroundTask<Void> task;
-
-			@Override
-			public void handle(ActionEvent event) {
-				if (task != null){
-					task.cancel(true);
-				}
-			}
-		};
-
-		BackgroundTask<Void> task = new BackgroundTask<Void>() {
+		final BackgroundTask<Void> backgroundTask = new BackgroundTask<Void>() {
 
 			@Override
 			protected Void compute() {
-				while (morework() && ! isCancelled()){
-					doSomeWork();
+
+				int count = 0;
+
+				while ( ! isCancelled()){
+
+					setProgress(count, 10);
+
+					if (10 < count){
+						break;
+					}
+
+
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+					}
+					count ++;
 				}
 				return null;
 			}
 
+			@Override
+			protected void onStart(){
+				isBtnExecuteDisabled.set(true);
+				progressBar.setProgress(0);
+				status.set(ExecuteStatus.EXECUTING);
+			}
 
+			@Override
+			protected void onProgress(int current, int max) {
+				progressBar.setProgress((float)current/max);
+			};
 
 			@Override
 			public void onCompletion(Void result, Throwable exception, boolean canceled){
 				btnCancel.setOnAction(null);
-				lblStatus.setText(canceled ? "キャンセルされた":"完了した");
+				status.set(canceled ? ExecuteStatus.CANCELED:ExecuteStatus.DONE);
+				isBtnExecuteDisabled.set(false);
 			}
 		};
 
+		final EventHandler<ActionEvent> cancelHander = new EventHandler<ActionEvent>() {
 
-		btnCancel.setOnAction(listener);
-		backgroundExec.execute(task);
+			private BackgroundTask<Void> task = backgroundTask;
+
+			@Override
+			public void handle(ActionEvent event) {
+				task.cancel(true);
+			}
+		};
+
+		btnCancel.setOnAction(cancelHander);
+		backgroundExec.execute(backgroundTask);
 	}
 }

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane prefHeight="69.0" prefWidth="224.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="threadcancelprogresstask.FXController">
+   <bottom>
+      <HBox prefHeight="26.0" prefWidth="224.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="btnExecute" mnemonicParsing="false" onAction="#execute" text="実行" />
+            <Button fx:id="btnCancel" mnemonicParsing="false" text="キャンセル" />
+         </children>
+      </HBox>
+   </bottom>
+   <top>
+      <Label fx:id="lblStatus" text="状態説明" BorderPane.alignment="CENTER" />
+   </top>
+   <center>
+      <ProgressBar fx:id="progressBar" prefWidth="200.0" progress="0.0" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>

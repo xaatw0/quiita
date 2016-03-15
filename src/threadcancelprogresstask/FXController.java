@@ -29,6 +29,9 @@ public class FXController implements Initializable{
 	private Button btnCancel;
 
 	@FXML
+	private Button btnException;
+
+	@FXML
 	private Label lblStatus;
 
 	@FXML
@@ -52,6 +55,7 @@ public class FXController implements Initializable{
 		// 実行ボタンとキャンセルボタンの使用可否を逆の状態にする
 		btnExecute.disableProperty().bind(isBtnExecuteDisabled);
 		btnCancel.disableProperty().bind(isBtnExecuteDisabled.not());
+		btnException.disableProperty().bind(isBtnExecuteDisabled.not());
 	}
 
 	@FXML
@@ -71,6 +75,10 @@ public class FXController implements Initializable{
 
 					if (isCancelled()){
 						break;
+					}
+
+					if (isBtnExceptionPressed()){
+						throw new InterruptedException("例外発生ボタンが押された");
 					}
 
 					try {
@@ -102,20 +110,29 @@ public class FXController implements Initializable{
 
 		    @Override
 		    protected void failed() {
-			    updateMessage("失敗した");
+			    updateMessage("失敗した: " + getException().getMessage());
 		    }
 
 		    @Override
 		    protected void done(){
 		        btnCancel.setOnAction(null);
 		        isBtnExecuteDisabled.set(false);
+		        setBtnExceptionPressed(false);
 		    }
 		};
 
 		progressBar.progressProperty().bind(task.progressProperty());
 		lblStatus.textProperty().bind(task.messageProperty());
 		btnCancel.setOnAction(event ->{task.cancel(true);});
+		btnException.setOnAction(event -> {setBtnExceptionPressed(true);});
 
 		backgroundExec.execute(task);
 	}
+
+	private boolean isBtnExceptionPressed = false;
+
+	private synchronized boolean isBtnExceptionPressed(){ return isBtnExceptionPressed;}
+
+	private synchronized void setBtnExceptionPressed(boolean value){isBtnExceptionPressed = value;}
+
 }

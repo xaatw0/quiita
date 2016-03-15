@@ -11,6 +11,7 @@
          <children>
             <Button fx:id="btnExecute" mnemonicParsing="false" onAction="#execute" text="実行" />
             <Button fx:id="btnCancel" mnemonicParsing="false" text="キャンセル" />
+            <Button fx:id="btnException" mnemonicParsing="false" text="例外発生" />
          </children>
       </HBox>
    </bottom>

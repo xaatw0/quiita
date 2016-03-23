@@ -90,4 +90,52 @@ public class JavaBeanPropertyTest {
 				.build();
 	}
 
+	private String result1;
+	private String result2;
+
+	@Test
+	public void addListener() throws NoSuchMethodException{
+
+		SampleBean bean = new SampleBean();
+
+		StringProperty property =
+				JavaBeanStringPropertyBuilder.create()
+				.bean(bean)
+				.name("name")
+				.build();
+
+		property.addListener((o,ov,nv)-> { result1 = "property:" + nv;});
+
+		StringProperty bindProperty = new SimpleStringProperty();
+		bindProperty.addListener((o,ov,nv)-> { result2 = "bindProperty:" + nv;});
+
+		bindProperty.bindBidirectional(property);
+
+		assertThat(result1, is(nullValue()));
+		assertThat(result2, is(nullValue()));
+
+		// Beanを設定。バインドとリスナーは動かない。
+		bean.setName("1");
+		assertThat(bean.getName(), is("1"));
+		assertThat(property.get(), is("1"));
+		assertThat(bindProperty.get(), is(nullValue()));
+		assertThat(result1, is(nullValue()));
+		assertThat(result2, is(nullValue()));
+
+		// プロパティを設定
+		property.set("2");
+		assertThat(bean.getName(), is("2"));
+		assertThat(property.get(), is("2"));
+		assertThat(bindProperty.get(), is("2"));
+		assertThat(result1, is("property:2"));
+		assertThat(result2, is("bindProperty:2"));
+
+		// バインドしたプロパティを設定
+		bindProperty.set("3");
+		assertThat(bean.getName(), is("3"));
+		assertThat(property.get(), is("3"));
+		assertThat(bindProperty.get(), is("3"));
+		assertThat(result1, is("property:3"));
+		assertThat(result2, is("bindProperty:3"));
+	}
 }

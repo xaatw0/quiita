@@ -5,7 +5,9 @@ import static org.hamcrest.MatcherAssert.*;
 
 import java.time.LocalDate;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -111,6 +113,9 @@ public class JavaBeanPropertyTest {
 
 		bindProperty.bindBidirectional(property);
 
+		BooleanProperty isEquals = new SimpleBooleanProperty();
+		isEquals.bind(property.isEqualTo("1").or(property.isEqualTo("2")));
+
 		assertThat(result1, is(nullValue()));
 		assertThat(result2, is(nullValue()));
 
@@ -121,6 +126,8 @@ public class JavaBeanPropertyTest {
 		assertThat(bindProperty.get(), is(nullValue()));
 		assertThat(result1, is(nullValue()));
 		assertThat(result2, is(nullValue()));
+		assertThat(isEquals.get(), is(false));
+		assertThat(property.isEqualTo("1").get(), is(true));
 
 		// プロパティを設定
 		property.set("2");
@@ -129,6 +136,7 @@ public class JavaBeanPropertyTest {
 		assertThat(bindProperty.get(), is("2"));
 		assertThat(result1, is("property:2"));
 		assertThat(result2, is("bindProperty:2"));
+		assertThat(isEquals.get(), is(true));
 
 		// バインドしたプロパティを設定
 		bindProperty.set("3");
@@ -137,5 +145,7 @@ public class JavaBeanPropertyTest {
 		assertThat(bindProperty.get(), is("3"));
 		assertThat(result1, is("property:3"));
 		assertThat(result2, is("bindProperty:3"));
+		assertThat(isEquals.get(), is(false));
+
 	}
 }

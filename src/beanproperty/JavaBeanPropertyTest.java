@@ -67,7 +67,7 @@ public class JavaBeanPropertyTest {
 	}
 
 	@Test(expected=NoSuchMethodException.class)
-	public void JavaBeanObjectProperty_error() throws NoSuchMethodException{
+	public void JavaBeanObjectProperty_途中が大文字() throws NoSuchMethodException{
 
 		SampleBean bean = new SampleBean();
 
@@ -75,6 +75,18 @@ public class JavaBeanPropertyTest {
 				JavaBeanObjectPropertyBuilder.create()
 				.bean(bean)
 				.name("birthDay") // Dが大文字
+				.build();
+	}
+
+	@Test
+	public void JavaBeanObjectProperty_先頭が大文字は大丈夫() throws NoSuchMethodException{
+
+		SampleBean bean = new SampleBean();
+
+		ObjectProperty<LocalDate> property =
+				JavaBeanObjectPropertyBuilder.create()
+				.bean(bean)
+				.name("Birthday") // 先頭が大文字
 				.build();
 	}
 

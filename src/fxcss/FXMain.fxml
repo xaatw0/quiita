@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane prefHeight="42.0" prefWidth="296.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <HBox prefHeight="31.0" prefWidth="277.0" styleClass="fxmain.css" stylesheets="@fxmain.css" BorderPane.alignment="CENTER">
+         <children>
+            <Button mnemonicParsing="false" text="Button" />
+            <Button mnemonicParsing="false" prefHeight="23.0" prefWidth="92.0" text="Button" />
+            <Button id="button" mnemonicParsing="false" text="Button" />
+         </children>
+      </HBox>
+   </center>
+   <bottom>
+      <Button mnemonicParsing="false" text="Button" BorderPane.alignment="CENTER" />
+   </bottom>
+</BorderPane>

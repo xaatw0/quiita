@@ -46,16 +46,19 @@ public class FXController implements Initializable{
 		// 相互に影響し合う
 		checkBox1.selectedProperty().bindBidirectional(checkBox2.selectedProperty());
 
-		// チェックボックス3の値は、チェックボックス4によるため、チェックボックス3のチェックを変更すると例外発生
+		// チェックボックス3の値は、チェックボックス4に依存するため、
+		// チェックボックス3のチェックを変更すると例外発生する
 		checkBox3.selectedProperty().bind(checkBox4.selectedProperty());
 
-		// チェックがあるとき、有効になる
+		// チェックがあるとき、ボタンが入力可能になる
 		button.disableProperty().bind(checkBox1.selectedProperty().not());
 
+		// ラベルのテキストは、チェックボックス1のチェックの内容に文字を連結させて出力する
 		StringProperty stringProperty = new SimpleStringProperty("");
 		stringProperty.bind( checkBox1.selectedProperty().asString().concat(" ←チェックの中身"));
 		label.textProperty().bind(stringProperty);
 
+		// チェックボックス5のチェック状況はプロパティと連動させる。
 		checkBox5.selectedProperty().bindBidirectional(blnBindBidirectional);
 		lblCheckbox5.textProperty().bind(blnBindBidirectional.asString());
 
@@ -84,6 +87,7 @@ public class FXController implements Initializable{
 
 	@FXML
 	public void buttonPressed(ActionEvent event){
+		// BooleanPropertyのtrue/falseを入れかえる
 		blnBindBidirectional.set(! blnBindBidirectional.get());
 	}
 }

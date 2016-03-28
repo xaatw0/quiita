@@ -7,7 +7,7 @@
 
 <BorderPane prefHeight="42.0" prefWidth="296.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-      <HBox prefHeight="31.0" prefWidth="277.0" styleClass="fxmain.css" stylesheets="@fxmain.css" BorderPane.alignment="CENTER">
+      <HBox prefHeight="31.0" prefWidth="277.0" stylesheets="@fxmain.css" BorderPane.alignment="CENTER">
          <children>
             <Button mnemonicParsing="false" text="Button" />
             <Button mnemonicParsing="false" prefHeight="23.0" prefWidth="92.0" text="Button" />

@@ -15,6 +15,8 @@ public class FXController implements Initializable{
 
 	@FXML private TextField txtReg;
 
+	@FXML private RestrictedTextField txtRestricted;
+
 	FXLogic logic = new FXLogic();
 
 	@Override
@@ -23,5 +25,6 @@ public class FXController implements Initializable{
 		logic.initialize();
 		txtNumber.textProperty().bindBidirectional(logic.number());
 
+		txtRestricted.setVerifier(RestrictedTextField.NUMBER_ONLY);
 	}
 }

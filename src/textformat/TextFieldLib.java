@@ -15,18 +15,16 @@ public class TextFieldLib {
 
 			StringProperty property = (StringProperty) observable;
 
-			if (newValue == null){
-				property.setValue("");
-				return;
-			} else if (newValue.isEmpty()){
-				return;
-			}
+		    if (newValue == null) {
+		    		property.set("");
+		    } else {
 
-			if(isNumber.test(newValue)){
-				return;
-			}
-
-			property.setValue(oldValue == null ? "": oldValue);
+		          if (property.get() == null || "".equals(property.get())) {
+		            // no action required, text property is already blank, we don't need to set it to 0.
+		          } else {
+		            property.set(newValue.toString());
+		          }
+		        }
 		});
 
 	}

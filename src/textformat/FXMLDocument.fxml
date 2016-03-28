@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="50.0" prefWidth="272.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="textformat.FXMLDocumentController">
+    <children>
+        <Label fx:id="label_1" layoutX="14.0" layoutY="42.0" minHeight="16" minWidth="69" text="私の毎月のお小遣いは" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
+         <font>
+            <Font size="14.0" />
+         </font></Label>
+      <Spinner fx:id="spinner" layoutX="145.0" layoutY="10.0" prefHeight="30.0" prefWidth="80.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="145.0" AnchorPane.topAnchor="10.0" />
+      <Label fx:id="label_2" layoutX="225.0" layoutY="10.0" text="です。" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="235.0" AnchorPane.topAnchor="10.0">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+    </children>
+</AnchorPane>

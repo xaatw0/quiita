@@ -22,10 +22,13 @@ public class SocketServer {
 				Socket socket = server.accept();
 
 				// 以下、クライアントからの要求発生後
-				try (InputStream inputStream = socket.getInputStream();
+
+				try (// クライアントからのデータ受信する設定
+					InputStream inputStream = socket.getInputStream();
 					DataInputStream inputData = new DataInputStream(inputStream);
 					ObjectInputStream input = new ObjectInputStream(inputData);
 
+					// クライアントへのデータ送信を実施する設定
 					OutputStream outputStream = socket.getOutputStream();
 					DataOutputStream outputData = new DataOutputStream(outputStream)){
 
@@ -33,14 +36,11 @@ public class SocketServer {
 						Runnable data = (Runnable) input.readObject();
 						new Thread(data).start();
 
-						if (data instanceof SocketData) {
-							SocketData receivedData = (SocketData) data;
-							outputData.writeBytes("Success: " + receivedData.getName() + "(" + receivedData.getAge() + ")");
-						}
+						// クライアントに返信するデータを作成する
+						SocketData receivedData = (SocketData) data;
+						outputData.writeBytes("Success: " + receivedData.getName() + "(" + receivedData.getAge() + ")");
 
-						Thread.sleep(2000);
-
-				} catch (ClassNotFoundException | IOException | InterruptedException  e ) {
+				} catch (ClassNotFoundException | IOException e) {
 					e.printStackTrace();
 				}
 			}

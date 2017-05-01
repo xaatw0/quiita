@@ -11,32 +11,39 @@ import java.net.Socket;
 
 public class SocketServer {
 
-	public static void main(String args[]) {
+	public static void main(String args[]) throws IOException {
 		int port = Integer.parseInt(args[0]); // サーバ側の待受ポート番号
 
 		try (ServerSocket server = new ServerSocket(port)) {
 
-			while (true) {
-				Socket socket = server.accept(); // クライアントからの通信開始要求が来るまで待機
+			for(;;){
+
+				// クライアントからの通信開始要求が来るまで待機
+				Socket socket = server.accept();
 
 				// 以下、クライアントからの要求発生後
 				try (InputStream inputStream = socket.getInputStream();
-						DataInputStream inputData = new DataInputStream(inputStream);
-						ObjectInputStream input = new ObjectInputStream(inputData)) {
+					DataInputStream inputData = new DataInputStream(inputStream);
+					ObjectInputStream input = new ObjectInputStream(inputData);
 
-					SocketData data = (SocketData) input.readObject();
+					OutputStream outputStream = socket.getOutputStream();
+					DataOutputStream outputData = new DataOutputStream(outputStream)){
 
-					try (OutputStream outputStream = socket.getOutputStream();
-							DataOutputStream outputData = new DataOutputStream(outputStream)) {
-						outputData.writeBytes("Success: " + data.getName() + "(" + data.getAge() + ")");
-					}
-				} catch (ClassNotFoundException e) {
+						// クライアントからのデータを取得して、結果を返す
+						Runnable data = (Runnable) input.readObject();
+						new Thread(data).start();
+
+						if (data instanceof SocketData) {
+							SocketData receivedData = (SocketData) data;
+							outputData.writeBytes("Success: " + receivedData.getName() + "(" + receivedData.getAge() + ")");
+						}
+
+						Thread.sleep(2000);
+
+				} catch (ClassNotFoundException | IOException | InterruptedException  e ) {
 					e.printStackTrace();
 				}
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
-
 }

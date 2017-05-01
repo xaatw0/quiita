@@ -12,7 +12,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class SocketClient {
-	public static void main(String args[]) throws UnknownHostException, IOException {
+	public static void main(String args[]) throws UnknownHostException,
+			IOException {
 
 		String server = args[0];
 		int port = Integer.parseInt(args[1]); // サーバー側のポート番号
@@ -21,20 +22,24 @@ public class SocketClient {
 
 		// サーバーに数値を送信
 		try (Socket socket = new Socket(server, port);
-			OutputStream os = socket.getOutputStream();
-			DataOutputStream dos = new DataOutputStream(os);
-				ObjectOutputStream oos = new ObjectOutputStream(dos)) {
 
-				oos.writeObject(data);
+				// サーバにデータ送信する設定
+				OutputStream os = socket.getOutputStream();
+				DataOutputStream dos = new DataOutputStream(os);
+				ObjectOutputStream oos = new ObjectOutputStream(dos);
 
-			// 演算結果を受信
-			try(InputStream is = socket.getInputStream();
-					DataInputStream dis = new DataInputStream(is);
-					InputStreamReader reader = new InputStreamReader(dis);
-					BufferedReader buffer = new BufferedReader(reader)){
-				String message = buffer.readLine();
-				System.out.println(message);
-			}
+				// サーバからデータを受信する設定
+				InputStream is = socket.getInputStream();
+				DataInputStream dis = new DataInputStream(is);
+				InputStreamReader reader = new InputStreamReader(dis);
+				BufferedReader buffer = new BufferedReader(reader)) {
+
+			// サーバにデータを送信する
+			oos.writeObject(data);
+
+			// サーバからデータを受信する
+			String message = buffer.readLine();
+			System.out.println(message);
 		}
 	}
 }

@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -20,14 +21,17 @@ public class SocketServer {
 
 				// 以下、クライアントからの要求発生後
 				try (InputStream inputStream = socket.getInputStream();
-						DataInputStream inputData = new DataInputStream(inputStream)) {
+						DataInputStream inputData = new DataInputStream(inputStream);
+						ObjectInputStream input = new ObjectInputStream(inputData)) {
 
-					int req = inputData.readInt();
+					SocketData data = (SocketData) input.readObject();
 
 					try (OutputStream outputStream = socket.getOutputStream();
 							DataOutputStream outputData = new DataOutputStream(outputStream)) {
-						outputData.writeInt(req * req);
+						outputData.writeBytes("Success: " + data.getName() + "(" + data.getAge() + ")");
 					}
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
 				}
 			}
 		} catch (IOException e) {

@@ -1,9 +1,12 @@
 package network;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -14,18 +17,23 @@ public class SocketClient {
 		String server = args[0];
 		int port = Integer.parseInt(args[1]); // サーバー側のポート番号
 
+		SocketData data = new SocketData(args[2], Integer.parseInt(args[3]));
+
 		// サーバーに数値を送信
 		try (Socket socket = new Socket(server, port);
-				OutputStream os = socket.getOutputStream();
-				DataOutputStream dos = new DataOutputStream(os)) {
+			OutputStream os = socket.getOutputStream();
+			DataOutputStream dos = new DataOutputStream(os);
+				ObjectOutputStream oos = new ObjectOutputStream(dos)) {
 
-			dos.writeInt(Integer.parseInt(args[2]));
+				oos.writeObject(data);
 
 			// 演算結果を受信
 			try(InputStream is = socket.getInputStream();
-					DataInputStream dis = new DataInputStream(is)){
-				int res = dis.readInt();
-				System.out.println(res);
+					DataInputStream dis = new DataInputStream(is);
+					InputStreamReader reader = new InputStreamReader(dis);
+					BufferedReader buffer = new BufferedReader(reader)){
+				String message = buffer.readLine();
+				System.out.println(message);
 			}
 		}
 	}

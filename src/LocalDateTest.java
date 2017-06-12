@@ -261,11 +261,20 @@ public class LocalDateTest {
 		int count = 0;
 		LocalDate from = LocalDate.of(2014, 1, 1);
 		LocalDate to = LocalDate.of(2015, 1, 1);
-		for (LocalDate index = from; from.isBefore(to); index = index.plusMonths(1)){
+		for (LocalDate index = from; index.isBefore(to); index = index.plusMonths(1)){
 			count ++;
 		}
 
 		assertThat(count, is(12));
+	}
+
+	@Test
+	public void toString_(){
+		assertThat(LocalDate.of(2016, 11, 11).toString(), is("2016-11-11"));
+		assertThat(LocalDate.of(2016,  1, 11).toString(), is("2016-01-11"));
+		assertThat(LocalDate.of(2016, 11,  1).toString(), is("2016-11-01"));
+		assertThat(LocalDate.of(2016,  1,  1).toString(), is("2016-01-01"));
+		assertThat(LocalDate.of(  16,  1,  1).toString(), is("0016-01-01"));
 	}
 
 	@Test

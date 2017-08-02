@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+
+<BorderPane prefHeight="75.0" prefWidth="224.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="taskservice.FXController">
+   <bottom>
+      <Button mnemonicParsing="false" onAction="#btnClick" text="Button" BorderPane.alignment="CENTER" />
+   </bottom>
+   <center>
+      <ProgressBar fx:id="progressBar" prefWidth="200.0" progress="0.0" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>

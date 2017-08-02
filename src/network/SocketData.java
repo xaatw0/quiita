@@ -2,7 +2,7 @@ package network;
 
 import java.io.Serializable;
 
-public class SocketData implements Serializable, Runnable{
+public class SocketData implements Serializable{
 	private String name;
 	private int age;
 
@@ -17,10 +17,5 @@ public class SocketData implements Serializable, Runnable{
 
 	public int getAge(){
 		return age;
-	}
-
-	@Override
-	public void run() {
-		System.out.println("receive:" + getName() + " is " + getAge() + " old.");
 	}
 }

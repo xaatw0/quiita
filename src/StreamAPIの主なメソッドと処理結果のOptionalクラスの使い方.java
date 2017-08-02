@@ -17,6 +17,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.Set;
+import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
@@ -278,6 +279,10 @@ public class StreamAPIの主なメソッドと処理結果のOptionalクラス�
 		// 引数の値がNullでなければその値を格納したOptionalを、NullならemptyなOptionalを返します
 		assertThat(Optional.ofNullable(optional), is(Optional.of(optional)));
 		assertThat(Optional.ofNullable(null), is(Optional.empty()));
+
+		// OptionalでNullチェック
+		assertThat(Optional.ofNullable("").isPresent(), is(true));
+		assertThat(Optional.ofNullable(null).isPresent(), is(false));
 
 		// Optionalに値がある場合、ifPresentの処理が実行されます
 		Optional.of(optional).ifPresent(value -> assertThat(value.get(), is("あ")));
@@ -588,6 +593,37 @@ public class StreamAPIの主なメソッドと処理結果のOptionalクラス�
 	}
 
 	@Test
+	public void groupingBy_Count(){
+
+		String[] array = {"AA","AC","BB","BC","BD"};
+
+		// Mapとグループ化
+		Map<String,Long> result =
+				Arrays.stream(array)
+				.collect(Collectors.groupingBy(p -> p.substring(0,1), Collectors.counting()));
+
+		assertThat(result.size(), is(2));
+		assertThat(result.get("A"), is(2));
+		assertThat(result.get("B"), is(3));
+	}
+
+	@Test
+	public void groupingBy_sum(){
+
+		Integer[] array = {10,11,23,24,30};
+
+		// Mapとグループ化
+		Map<Integer,Integer> result =
+				Arrays.stream(array)
+				.collect(Collectors.groupingBy(p -> Integer.divideUnsigned(p, 10), Collectors.summingInt(Integer::intValue)));
+
+		assertThat(result.size(), is(3));
+		assertThat(result.get(1), is(21));
+		assertThat(result.get(2), is(47));
+		assertThat(result.get(3), is(30));
+	}
+
+	@Test
 	public void reduce(){
 		int[] values = {1,2,3,4,5,6,7,8,9,10};
 
@@ -613,5 +649,70 @@ public class StreamAPIの主なメソッドと処理結果のOptionalクラス�
 
 		appened = Arrays.stream(str).parallel().reduce("最初", (v1,v2) -> v1 + v2, (r1,r2) -> r1 +"連結"+ r2);
 		assertThat(appened, is("最初あ連結最初い連結最初う連結最初え連結最初お"));
+	}
+
+	private class Obj{
+
+		String name;
+		int x,y;
+		public Obj(int x, int y){
+			this.x = x; this.y = y;
+		}
+		public Obj(String name, int x, int y){
+			this(x,y); this.name = name;
+		}
+
+		public String getName(){return name;}
+		public int getX(){return x;}
+		public int getY(){return y;}
+	}
+
+	@Test
+	public void reduceObject(){
+
+		List<Obj> lst = new ArrayList<>();
+		lst.add(new Obj("A",1, 0));
+		lst.add(new Obj("A",1, 1));
+		lst.add(new Obj("B",2, 2));
+
+		// 基データが変更にならない
+		Optional<Obj> result = lst.stream().reduce((o1, o2)-> new Obj(o1.x + o2.x, o1.y + o2.y));
+		assertThat(result.get().x, is(4));
+		assertThat(result.get().y, is(3));
+
+		Obj result2 = lst.stream().reduce(new Obj(0, 0), (o1, o2)-> new Obj(o1.x + o2.x, o1.y + o2.y));
+		assertThat(result2.x, is(4));
+		assertThat(result2.y, is(3));
+
+		Map<String, IntSummaryStatistics> result3 =
+				lst.stream()
+				.collect(Collectors.groupingBy(Obj::getName, Collectors.summarizingInt(Obj::getX)));
+
+		assertThat(result3.get("A").getSum(), is(2L));
+		assertThat(result3.get("B").getSum(), is(2L));
+
+		Map<String, Obj> result4 =
+				lst.stream()
+				.collect(Collectors.groupingBy(Obj::getName, Collectors.reducing(new Obj(0, 0), (o1, o2)-> new Obj(o1.x+o2.x, o1.y+o2.y))));
+
+		assertThat(result4.get("A").getX(), is(2));
+		assertThat(result4.get("B").getX(), is(2));
+		assertThat(result4.get("A").getY(), is(1));
+		assertThat(result4.get("B").getY(), is(2));
+
+		// 基データが変更になる
+		BinaryOperator<Obj> operator = (o1, o2) -> {
+			o1.x = o1.x + o2.x;
+			o1.y = o1.y + o2.y;
+			return o1;
+		};
+
+		result = lst.stream().reduce(operator);
+		assertThat(result.get().x, is(4));
+		assertThat(result.get().y, is(3));
+
+		result = lst.stream().reduce(operator);
+		assertThat(result.get().x, is(7));
+		assertThat(result.get().y, is(6));
 	}
 }

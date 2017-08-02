@@ -27,7 +27,7 @@ public class SocketThreadedServer {
 		}
 	}
 
-	public static class Result implements Runnable{
+	protected static class Result implements Runnable{
 
 		private InputStream input;
 
@@ -50,8 +50,11 @@ public class SocketThreadedServer {
 
 					// クライアントに返信するデータを作成する
 					SocketData receivedData = (SocketData)input.readObject();
+
+					// 同時実行で並列にできるように待機時間を設ける
 					Thread.sleep(receivedData.getAge() * 100);
 
+					// 返信内容
 					outputData.writeBytes("Success: " + receivedData.getName() + "(" + receivedData.getAge() + ")");
 
 			} catch(IOException | ClassNotFoundException | InterruptedException e){

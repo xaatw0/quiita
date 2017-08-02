@@ -11,7 +11,7 @@ import java.net.Socket;
 
 public class SocketServer {
 
-	public static void main(String args[]) throws IOException {
+	public static void main(String args[]) throws IOException, InterruptedException {
 		int port = Integer.parseInt(args[0]); // サーバ側の待受ポート番号
 
 		try (ServerSocket server = new ServerSocket(port)) {
@@ -32,12 +32,14 @@ public class SocketServer {
 					OutputStream outputStream = socket.getOutputStream();
 					DataOutputStream outputData = new DataOutputStream(outputStream)){
 
-						// クライアントからのデータを取得して、結果を返す
-						Runnable data = (Runnable) input.readObject();
-						new Thread(data).start();
+
+
+						SocketData receivedData = (SocketData) input.readObject();
+
+						// 同時実行で並列にできるように待機時間を設ける
+						Thread.sleep(receivedData.getAge() * 100);
 
 						// クライアントに返信するデータを作成する
-						SocketData receivedData = (SocketData) data;
 						outputData.writeBytes("Success: " + receivedData.getName() + "(" + receivedData.getAge() + ")");
 
 				} catch (ClassNotFoundException | IOException e) {

@@ -9,6 +9,7 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.binding.NumberBinding;
+import javafx.beans.binding.ObjectBinding;
 import javafx.beans.binding.When;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
@@ -350,7 +351,7 @@ public class BindingTest {
 
 		BooleanProperty[] properties = {value1,value2,value3};
 		for (BooleanProperty property: properties){
-			isAllTrue = isAllTrue.and(property);
+			isAllTrue =  isAllTrue.and(property);
 		}
 
 		assertThat(isAllTrue.get(), is(false));
@@ -408,5 +409,43 @@ public class BindingTest {
 		value1.set(1);
 		assertThat(property1.get(), is(0));
 		assertThat(property2.get(), is(9));
+	}
+
+	@Test
+	public void どのタイミングが生成され_答えは共有化されるか(){
+
+		final StringBuffer buffer = new StringBuffer();
+
+		class TimingCheck{
+			TimingCheck(String value){
+				buffer.append(value);
+			}
+		}
+
+		// 答えのオブジェクトの生成タイミングと、共有されているのか
+		// →ObjectBinding生成時に答えのオブジェクトが生成され、
+		//   答えのオブジェクトは共有される
+
+
+		BooleanProperty isProperty = new SimpleBooleanProperty();
+		ObjectBinding<TimingCheck> value =
+				new When(isProperty).then(new TimingCheck("True was created ")).otherwise(new TimingCheck("False was created "));
+
+		buffer.append("end");
+		assertThat(buffer.toString(), is("True was created False was created end"));
+
+		isProperty.set(true);
+		TimingCheck resultA1 = value.get();
+
+		isProperty.set(false);
+		TimingCheck resultB1 = value.get();
+
+		isProperty.set(true);
+		TimingCheck resultA2 = value.get();
+		assertThat(resultA1, is(sameInstance(resultA2)));
+
+		isProperty.set(false);
+		TimingCheck resultB2 = value.get();
+		assertThat(resultB1, is(sameInstance(resultB2)));
 	}
 }

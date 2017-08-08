@@ -2,7 +2,12 @@ package fxbind;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
+
+import org.junit.Test;
+
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.binding.IntegerBinding;
 import javafx.beans.binding.NumberBinding;
 import javafx.beans.binding.When;
 import javafx.beans.property.BooleanProperty;
@@ -13,8 +18,6 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-
-import org.junit.Test;
 
 public class BindingTest {
 
@@ -330,5 +333,80 @@ public class BindingTest {
 		assertThat(isEmpty.get(), is(true));
 		assertThat(isNotEmpty.get(), is(false));
 		assertThat(isNull.get(), is(true));
+	}
+
+	@Test
+	public void bindingWithFor(){
+		BooleanBinding isAllTrue = new BooleanBinding(){
+			@Override
+			protected boolean computeValue() {
+				return true;
+			}
+		};
+
+		BooleanProperty value1 = new SimpleBooleanProperty();
+		BooleanProperty value2 = new SimpleBooleanProperty();
+		BooleanProperty value3 = new SimpleBooleanProperty();
+
+		BooleanProperty[] properties = {value1,value2,value3};
+		for (BooleanProperty property: properties){
+			isAllTrue = isAllTrue.and(property);
+		}
+
+		assertThat(isAllTrue.get(), is(false));
+
+		value1.set(true);
+		value2.set(true);
+		value3.set(true);
+		assertThat(isAllTrue.get(), is(true));
+
+		value3.set(false);
+		assertThat(isAllTrue.get(), is(false));
+	}
+
+	@Test
+	public void bindingSum(){
+
+		NumberBinding sum = new IntegerBinding(){
+
+			@Override
+			protected int computeValue() {
+				return 0;
+			}
+		};
+
+		IntegerProperty property1 = new SimpleIntegerProperty();
+		property1.bind(sum);
+
+		IntegerProperty value1 = new SimpleIntegerProperty();
+		IntegerProperty value2 = new SimpleIntegerProperty();
+		IntegerProperty value3 = new SimpleIntegerProperty();
+
+		IntegerProperty[] properties = {value1,value2,value3};
+		for (IntegerProperty property: properties){
+			sum = sum.add(property);
+		}
+
+		IntegerProperty property2 = new SimpleIntegerProperty();
+		property2.bind(sum);
+
+		assertThat(property1.get(), is(0));
+		assertThat(property2.get(), is(0));
+
+		value1.set(10);
+		assertThat(property1.get(), is(0));
+		assertThat(property2.get(), is(10));
+
+		value2.set(5);
+		assertThat(property1.get(), is(0));
+		assertThat(property2.get(), is(15));
+
+		value3.set(3);
+		assertThat(property1.get(), is(0));
+		assertThat(property2.get(), is(18));
+
+		value1.set(1);
+		assertThat(property1.get(), is(0));
+		assertThat(property2.get(), is(9));
 	}
 }

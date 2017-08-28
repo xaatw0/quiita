@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane prefHeight="116.0" prefWidth="224.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxicon.FXController">
+   <center>
+      <CheckBox fx:id="check" mnemonicParsing="false" selected="true" text="check" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>

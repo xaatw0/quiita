@@ -31,11 +31,12 @@ public class FXController implements Initializable{
 		icon.bind(new When(check.selectedProperty())
 				.then(new Image(getClass().getResource(PATH_ICON_CHECKED).toString()))
 				.otherwise(new Image(getClass().getResource(PATH_ICON_NO_CHECK).toString())));
-		icons.add(icon.get());
 
 		icon.addListener( (o, oldValue, newValue) -> {
 			icons.remove(oldValue);
 			icons.add(newValue);
 		});
+
+		icons.add(icon.get());
 	}
 }

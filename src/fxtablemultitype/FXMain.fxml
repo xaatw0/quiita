@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane prefHeight="205.0" prefWidth="453.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxtablemultitype.FXController">
+   <center>
+      <TableView fx:id="table" prefHeight="176.0" prefWidth="224.0" BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn fx:id="colTitle" maxWidth="-Infinity" minWidth="150.0" prefWidth="-1.0" text="項目" />
+        </columns>
+      </TableView>
+   </center>
+</BorderPane>

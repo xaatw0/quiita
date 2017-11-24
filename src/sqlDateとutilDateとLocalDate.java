@@ -25,7 +25,7 @@ public class sqlDateとutilDateとLocalDate {
 	}
 
 	public java.util.Date convertToUtilDate(java.sql.Date sqlDate){
-		return (java.util.Date) sqlDate;
+		return sqlDate;
 	}
 
 	@Test
@@ -170,5 +170,4 @@ public class sqlDateとutilDateとLocalDate {
 
 		assertThat(convertToLocalDate(zonedDateTime), is(localDate));
 	}
-
 }

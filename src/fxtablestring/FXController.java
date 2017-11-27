@@ -2,13 +2,10 @@ package fxtablestring;
 
 import java.net.URL;
 import java.util.Arrays;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.IntStream;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,7 +21,7 @@ import javafx.util.Callback;
 
 public class FXController implements Initializable{
 
-	@FXML private TableView<StringProperty[]> table;
+	@FXML private TableView<String[]> table;
 
 	@FXML private ComboBox<Integer> cmbRowNumber;
 
@@ -32,11 +29,9 @@ public class FXController implements Initializable{
 
 	@FXML private TextField text;
 
-	private StringProperty[][] data;
+	private ObservableList<String[]> observableList;
 
-	private ObservableList<StringProperty[]> observableList;
-
-	private String[][] initData ={
+	private String[][] data ={
 		{"あ","い","う","え","お"},
 		{"か","き","く","け","こ"},
 		{"さ","し","す","せ","そ"},
@@ -51,50 +46,44 @@ public class FXController implements Initializable{
 
 		observableList = FXCollections.observableArrayList();
 		table.setItems(observableList);
-		int maxCol = Arrays.stream(initData).mapToInt(p->p.length).max().getAsInt();
-		data = new StringProperty[initData.length][];
+		int maxCol = Arrays.stream(data).mapToInt(p->p.length).max().getAsInt();
 		for (int i = 0; i < data.length; i++){
-			data[i] = new StringProperty[maxCol];
 			observableList.add(data[i]);
-
-			for (int j = 0; j < maxCol; j++){
-				data[i][j]= new SimpleStringProperty(Optional.ofNullable(initData[i][j]).orElse(""));
-			}
 		}
 
-		final Callback<CellDataFeatures<StringProperty[], StringProperty[]>, ObservableValue<StringProperty[]>> callback =
-				p -> new ReadOnlyObjectWrapper<StringProperty[]>(p.getValue());
+		final Callback<CellDataFeatures<String[], String[]>, ObservableValue<String[]>> callback =
+				p -> new ReadOnlyObjectWrapper<String[]>(p.getValue());
 
 		for (int i =0; i < maxCol; i++){
 			final int index = i;
 
 			String strIndex = Integer.toString(i);
-			TableColumn<StringProperty[], StringProperty[]> column = new TableColumn<>(strIndex);
+			TableColumn<String[], String[]> column = new TableColumn<>(strIndex);
 			table.getColumns().add(column);
 
 			column.setCellValueFactory(callback);
 			column.setCellFactory(col ->{
 				return
-				  new TableCell<StringProperty[], StringProperty[]>(){
+				  new TableCell<String[], String[]>(){
 					@Override
-			        protected void updateItem(StringProperty[] item, boolean empty) {
+			        protected void updateItem(String[] item, boolean empty) {
 						super.updateItem(item, empty);
 
-						if (item != null){
-							textProperty().set(item[index].get());
+						if (item != null && item[index] != null){
+							textProperty().set(item[index]);
 						}
 					}
 				 };
 			});
 		}
 
-		IntStream.rangeClosed(1, data.length).forEach(p-> cmbRowNumber.itemsProperty().getValue().add(Integer.valueOf(p)));
-		IntStream.rangeClosed(1, maxCol).forEach(p-> cmbColNumber.itemsProperty().getValue().add(Integer.valueOf(p)));
-		cmbRowNumber.setValue(1);
-		cmbColNumber.setValue(1);
+		IntStream.range(0, data.length).forEach(p-> cmbRowNumber.itemsProperty().getValue().add(Integer.valueOf(p)));
+		IntStream.range(0, maxCol).forEach(p-> cmbColNumber.itemsProperty().getValue().add(Integer.valueOf(p)));
+		cmbRowNumber.setValue(0);
+		cmbColNumber.setValue(0);
 
 		text.textProperty().addListener((o,ov,nv) ->{
-			data[cmbRowNumber.getValue().intValue()][cmbColNumber.getValue().intValue()].set(text.getText());
+			data[cmbRowNumber.getValue().intValue()][cmbColNumber.getValue().intValue()] = text.getText();
 			table.refresh();
 		});
 	}

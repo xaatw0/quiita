@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane prefHeight="335.0" prefWidth="425.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxtablestring.FXController">
+   <center>
+      <TableView fx:id="table" prefHeight="116.0" prefWidth="315.0" BorderPane.alignment="CENTER" />
+   </center>
+   <bottom>
+      <HBox prefHeight="24.0" prefWidth="425.0" spacing="10.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label text="行" />
+            <ComboBox fx:id="cmbRowNumber" prefHeight="23.0" prefWidth="51.0" />
+            <Label text="列" />
+            <ComboBox fx:id="cmbColNumber" prefHeight="23.0" prefWidth="36.0" />
+            <TextField fx:id="text" />
+         </children>
+      </HBox>
+   </bottom>
+</BorderPane>

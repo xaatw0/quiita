@@ -6,13 +6,13 @@ import java.util.ResourceBundle;
 import java.util.stream.IntStream;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
@@ -46,35 +46,17 @@ public class FXController implements Initializable{
 
 		observableList = FXCollections.observableArrayList();
 		table.setItems(observableList);
-		int maxCol = Arrays.stream(data).mapToInt(p->p.length).max().getAsInt();
+		int maxCol = Arrays.stream(data).mapToInt(p -> p.length).max().getAsInt();
 		for (int i = 0; i < data.length; i++){
 			observableList.add(data[i]);
 		}
 
-		final Callback<CellDataFeatures<String[], String[]>, ObservableValue<String[]>> callback =
-				p -> new ReadOnlyObjectWrapper<String[]>(p.getValue());
-
 		for (int i =0; i < maxCol; i++){
-			final int index = i;
-
-			String strIndex = Integer.toString(i);
-			TableColumn<String[], String[]> column = new TableColumn<>(strIndex);
+			TableColumn<String[], String> column = new TableColumn<>();
 			table.getColumns().add(column);
 
-			column.setCellValueFactory(callback);
-			column.setCellFactory(col ->{
-				return
-				  new TableCell<String[], String[]>(){
-					@Override
-			        protected void updateItem(String[] item, boolean empty) {
-						super.updateItem(item, empty);
-
-						if (item != null && item[index] != null){
-							textProperty().set(item[index]);
-						}
-					}
-				 };
-			});
+			final int idxCol = i;
+			column.setCellValueFactory(p -> new SimpleStringProperty((p.getValue()[idxCol])));
 		}
 
 		IntStream.range(0, data.length).forEach(p-> cmbRowNumber.itemsProperty().getValue().add(Integer.valueOf(p)));
@@ -87,5 +69,4 @@ public class FXController implements Initializable{
 			table.refresh();
 		});
 	}
-
 }
